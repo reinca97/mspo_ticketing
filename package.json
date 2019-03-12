@@ -1,5 +1,5 @@
 {
-  "name": "Hook-without-redux",
+  "name": "FLUX-without-redux",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
