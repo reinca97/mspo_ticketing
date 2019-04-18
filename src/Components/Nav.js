@@ -9,9 +9,6 @@ const Nav = props =>{
 
     return(
         <div className="Nav">
-            <button onClick={ () => dispatch( testAction(store.arr) ) }>
-                Press BUTTON and see what happen in your console.
-            </button>
         </div>
     )
 };

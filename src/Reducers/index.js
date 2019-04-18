@@ -14,11 +14,6 @@ export const reducer = (state,action)=>{
                 ...state,
                 title:action.title,
             };
-        case TEST:
-            return{
-                ...state,
-                arr:action.arr
-            };
 
 
         default:return state;

@@ -3,7 +3,6 @@ import {APP_INIT,TEST} from '../Constants';
 export const onAppIit = () =>{
     return{
         type:APP_INIT,
-        title:"Redux style without redux module include 'use-reducer-logger'"
     }
 };
 
