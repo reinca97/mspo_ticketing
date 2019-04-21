@@ -1,0 +1,22 @@
+.Nav{
+  width:100%;
+  min-height:40px;
+  line-height:40px;
+  background-color: #8a8a8a;
+
+
+  ul{
+    list-style:none;
+    margin:0 20px;
+    display:flex;
+
+    li{
+      margin-right:40px;
+
+      a{
+        text-decoration: none;
+        color:#ffffff;
+      }
+  }
+  }
+}

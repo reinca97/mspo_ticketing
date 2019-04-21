@@ -1,0 +1,19 @@
+import React, { useContext } from 'react';
+import {Context} from "../../Reducers";
+
+import "./style.scss"
+
+const Intro = props =>{
+    const {store, dispatch} = useContext(Context);
+
+    return(
+        <div className="intro">
+          <div>
+              <h1>MSPO</h1>
+              <h2>online-ticketing system</h2>
+          </div>
+        </div>
+    )
+};
+
+export default Intro;

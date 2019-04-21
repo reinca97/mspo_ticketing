@@ -1,2 +1,2 @@
-export const APP_INIT = "APP_INIT";
-export const TEST = "TEST";
+export const SET_DATA_LIST = "SET_DATA_LIST";
+export const SET_SELECTED_SEAT_LIST = "SET_SELECTED_SEAT_LIST";

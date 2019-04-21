@@ -1,32 +1,50 @@
 import React,{ useReducer, useEffect } from 'react';
-import firebase from './lib/firebase';
-
+import {onGetDataList} from "./lib/getHallData";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import './App.scss';
 import {Context, initialState, reducer} from './Reducers';
-import {onAppIit} from './Actions';
+import {setGetDataList} from './Actions';
 import logger from 'use-reducer-logger';
 
-import Nav from './Components/Nav';
-import Main from './Components/Main';
+
+import Nav from "./Components/Nav";
+import Booking from "./Components/Booking";
+import Intro from "./Components/Intro";
+
 
 const App = props =>{
+    // const database = firebase.database();
+    // const storageRef = database.ref();
+    // const main =storageRef.child("main");
 
-    const database = firebase.database();
-    console.log(database);
     const [store, dispatch] = useReducer( logger(reducer), initialState);
 
     useEffect( ()=>{
-        dispatch( onAppIit() );
+        appInit();
+
+
     },[]);
 
-    return (
-        <Context.Provider value={ {store, dispatch} }>
-            <div className="App">
-                <Nav />
-                <Main />
-            </div>
-        </Context.Provider>
 
+    const appInit = async() =>{
+        const list = await onGetDataList();
+        dispatch( setGetDataList(list) );
+
+    };
+
+
+
+
+    return (
+        <Route>
+            <Context.Provider value={ {store, dispatch} }>
+                <div className="App">
+                    <Route path="/" component={Nav} />
+                    <Route exact path="/" component={Intro} />
+                    <Route exact path="/booking" component={Booking} />
+                </div>
+            </Context.Provider>
+        </Route>
     )
 };
 

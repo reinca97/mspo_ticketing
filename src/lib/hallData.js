@@ -34,10 +34,10 @@ export const numberOfSeats = {
         DA:{FR:35, BK:83-36},
     },
     loop:{
-        GA:{FR:13, BK:80-14},
-        NA:{FR:8, BK:97-9},
-        DA:{FR:8, BK:97-9},
-        LA:{FR:13, BK:80-14 }
+        GA:{FR:13, BK:79-14+1},
+        NA:{FR:8, BK:96-9+1},
+        DA:{FR:8, BK:96-9+1},
+        LA:{FR:13, BK:79-14+1 }
     }
 };
 

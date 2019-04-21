@@ -1,21 +1,28 @@
-import {APP_INIT,TEST} from '../Constants';
+import {
+    SET_DATA_LIST,
+    SET_SELECTED_SEAT_LIST
+} from '../Constants';
 
-export const onAppIit = () =>{
+export const setGetDataList =  list =>{
+
     return{
-        type:APP_INIT,
+        type: SET_DATA_LIST,
+        totalSeatList:list
     }
 };
 
-export const testAction = (list) =>{
-    let tempArr = [...list];
-    const lastNum =  list[list.length-1];
-    if(tempArr.length<20){
-        tempArr= [...tempArr,(lastNum+1)];
-    }
 
+export const setSelectedSeatsList = (list, item) =>{
+
+    let currentList = [...list];
+    const index = currentList.indexOf(item);
+    if(index===-1){
+        currentList[currentList.length]=item;
+    }else{
+        currentList.splice(index, 1);
+    }
     return{
-        type:TEST,
-        arr:tempArr,
-        style:""
+        type: SET_SELECTED_SEAT_LIST,
+        selectedSeatsList:currentList
     }
 };

@@ -1,16 +1,30 @@
 import React, { useContext } from 'react';
-import {Context} from "../Reducers";
-import {testAction} from '../Actions'
-import "./Main.scss";
-import Zone from "./Zone";
+import {Context} from "../../Reducers";
+import "./style.scss";
+import Zone from "../Zone";
 
 
-const Main = props =>{
+const Booking = props =>{
     const {store, dispatch} = useContext(Context);
 
+    const onRegisterSeatList = () =>{
+        const count = store.selectedSeatsList.length;
+        if(window.confirm(`총 ${count}좌석을 예약 하시겠습니까?`)){
+            window.alert("---현재는 예약 가능한 기간이 아닙니다----")
+        }else{
+            window.alert("잘 생각하셨습니다.")
+        }
+    };
 
     return(
         <div className="main">
+            <div>
+                <span>좌석을 선택 한 후 예약 버튼을 누르세요. (1인당 최대 10석 가능)</span>
+                <button onClick={()=>onRegisterSeatList()}>
+                    선택한 좌석 예약
+                </button>
+            </div>
+
 
             <div className="ground">
                 <section>
@@ -48,4 +62,4 @@ const Main = props =>{
     )
 };
 
-export default Main;
+export default Booking;
