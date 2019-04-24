@@ -1,12 +1,13 @@
 import {
     SET_DATA_LIST,
-    SET_SELECTED_SEAT_LIST
+    SET_SELECTED_SEAT_DATA
 } from '../Constants';
 import React from 'react';
 
+
 export const initialState = {
     isLogin:false,
-    selectedSeatsList:[]
+    selectedSeatsData:{}
 };
 
 
@@ -18,13 +19,13 @@ export const reducer = (state,action)=>{
                 totalSeatList: action.totalSeatList
             };
 
-        case SET_SELECTED_SEAT_LIST:
+        case SET_SELECTED_SEAT_DATA:
             return{
                 ...state,
-                selectedSeatsList: action.selectedSeatsList
+                selectedSeatsData: action.selectedSeatsData
             };
 
-        default:return state;
+        default: return state;
     }
 };
 

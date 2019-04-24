@@ -1,5 +1,6 @@
 import * as firebase from "firebase";
 const config = {
+    apiKey: "AIzaSyDIjCFS-8J5dfxI1wI5LVMq9EDdnk4XeIc",
     authDomain: "ms-ticketing.firebaseapp.com",
     databaseURL: "https://ms-ticketing.firebaseio.com",
     projectId: "ms-ticketing",

@@ -1,6 +1,6 @@
 import {
     SET_DATA_LIST,
-    SET_SELECTED_SEAT_LIST
+    SET_SELECTED_SEAT_DATA
 } from '../Constants';
 
 export const setGetDataList =  list =>{
@@ -12,17 +12,10 @@ export const setGetDataList =  list =>{
 };
 
 
-export const setSelectedSeatsList = (list, item) =>{
+export const setSelectedSeatsData = (data) =>{
 
-    let currentList = [...list];
-    const index = currentList.indexOf(item);
-    if(index===-1){
-        currentList[currentList.length]=item;
-    }else{
-        currentList.splice(index, 1);
-    }
     return{
-        type: SET_SELECTED_SEAT_LIST,
-        selectedSeatsList:currentList
+        type: SET_SELECTED_SEAT_DATA,
+        selectedSeatsData:data
     }
 };

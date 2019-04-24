@@ -10,7 +10,7 @@ const Nav = props =>{
         <div className="Nav">
             <ul>
                 <li>
-                    <Link to="/">처음으로</Link>
+                    <Link to="/">HOME</Link>
                 </li>
                 <li>
                     <Link to="/booking">좌석 예매하기</Link>
@@ -19,7 +19,7 @@ const Nav = props =>{
                     <Link to="/my-reservation">내 자리 확인하기</Link>
                 </li>
                 <li>
-                    <Link to="/admin">관리자 페이지</Link>
+                    <Link to="/admin">ADMIN</Link>
                 </li>
             </ul>
         </div>
