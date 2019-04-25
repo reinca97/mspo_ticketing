@@ -23,7 +23,7 @@ const Zone = props =>{
 
        const currentData = store.totalSeatList;
        if(currentData){
-           setDataList(currentData[props.floor][props.block][props.FRBK])
+           setDataList(currentData.seats[props.floor][props.block][props.FRBK])
        }
 
    },[store.totalSeatList]);
@@ -69,7 +69,7 @@ const Zone = props =>{
     //     return seatList;
     // };
     // const  writeUserData = list => {
-    //     firebase.database().ref(`${props.floor}` + `/${props.block}`+`/${props.FRBK}` )
+    //     firebase.database().ref(`seats/${props.floor}` + `/${props.block}`+`/${props.FRBK}` )
     //         .set(list);
     // };
     //***********************************
@@ -77,7 +77,7 @@ const Zone = props =>{
 
 
     const editSeatInfo = (seatData, userData) =>{
-        firebase.database().ref(`${seatData.floor}` + `/${seatData.block}`+`/${seatData.FRBK}`+`/${seatData.index}`)
+        firebase.database().ref(`seats/${seatData.floor}` + `/${seatData.block}`+`/${seatData.FRBK}`+`/${seatData.index}`)
         .set( userData, err =>{
             if(err){
                 console.log(err)

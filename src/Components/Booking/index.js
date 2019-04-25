@@ -2,15 +2,15 @@ import React, { useContext, useState ,useEffect} from 'react';
 import {Context} from "../../Reducers";
 import "./style.scss";
 import Zone from "../Zone";
-/* global naverLogin */
+import firebase from "firebase";
+import {setUserData} from "../../Actions";
+import { Redirect } from "react-router-dom";
 
 const Booking = props =>{
     const {store, dispatch} = useContext(Context);
     const [floor, setFloor] = useState("ground");
 
     useEffect(()=>{
-
-
 
     },[]);
 
@@ -23,6 +23,7 @@ const Booking = props =>{
         );
 
         if(window.confirm(`총 ${count}좌석을 예약 하시겠습니까?`)){
+
             window.alert("---현재는 예약 가능한 기간이 아닙니다----")
         }else{
             window.alert("잘 생각하셨습니다.")
@@ -31,6 +32,10 @@ const Booking = props =>{
 
     return(
         <div className="booking">
+            {
+                store.userData.token ===""
+                && <Redirect to ="sign-in" />
+            }
             <div >
                 <div className="info">
                     <span>
@@ -43,8 +48,6 @@ const Booking = props =>{
                         <option value="loop">2층</option>
                     </select>
                 </div>
-
-
 
             </div>
 

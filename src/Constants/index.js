@@ -1,2 +1,3 @@
 export const SET_DATA_LIST = "SET_DATA_LIST";
 export const SET_SELECTED_SEAT_DATA = "SET_SELECTED_SEAT_DATA";
+export const SET_USER_DATA = "SET_USER_DATA";

@@ -10,8 +10,8 @@ import logger from 'use-reducer-logger';
 import Nav from "./Components/Nav";
 import Booking from "./Components/Booking";
 import Intro from "./Components/Intro";
-import Callback from "./Components/Callback";
-
+import SignIn from "./Components/SignIn";
+import CheckAuth from "./Components/CheckAuth";
 
 const App = props =>{
     // const database = firebase.database();
@@ -43,7 +43,8 @@ const App = props =>{
                     <section>
                         <Route exact path="/" component={Intro} />
                         <Route exact path="/booking" component={Booking} />
-                        <Route exact path="/callback" component={Callback} />
+                        <Route exact path="/sign-in" component={SignIn} />
+                        <Route exact path="/check-auth" component={CheckAuth}/>
                     </section>
                 </div>
             </Context.Provider>
