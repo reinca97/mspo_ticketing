@@ -2,82 +2,78 @@ import React, { useContext, useState ,useEffect} from 'react';
 import {Context} from "../../Reducers";
 import "./style.scss";
 import Zone from "../Zone";
+import Modal_Booking from "../Modal/Modal_Booking";
+
 import firebase from "firebase";
-import {setUserData} from "../../Actions";
+import {setUserData, setGetDataList} from "../../Actions";
 import { Redirect } from "react-router-dom";
+
+
 
 const Booking = props =>{
     const {store, dispatch} = useContext(Context);
     const [floor, setFloor] = useState("ground");
+    const [isDisplayModal, setIsDisplayModal] = useState("");
 
     useEffect(()=>{
 
     },[]);
 
-    const onRegisterSeatList = () =>{
-        let count =0;
-        Object.keys(store.selectedSeatsData).forEach(data=>{
-            console.log(store.selectedSeatsData[data]);
-            store.selectedSeatsData[data] && count++
-        }
-        );
 
-        if(window.confirm(`총 ${count}좌석을 예약 하시겠습니까?`)){
-
-            window.alert("---현재는 예약 가능한 기간이 아닙니다----")
-        }else{
-            window.alert("잘 생각하셨습니다.")
-        }
-    };
 
     return(
-        <div className="booking">
-            {
-                store.userData.token ===""
-                && <Redirect to ="sign-in" />
-            }
-            <div >
-                <div className="info">
+        <div>
+            <Modal_Booking
+                isDisplayModal={isDisplayModal}
+                setIsDisplayModal={setIsDisplayModal}
+            />
+            <div className="booking">
+                {
+                    store.userData.token ===""
+                    && <Redirect to ="sign-in" />
+                }
+                <div >
+                    <div className="info">
                     <span>
                          좌석을 선택 한 후 예약 버튼을 누르세요. (1인당 최대 10석 가능)
                     </span>
-                    <select name="floor"
-                            value={floor}
-                            onChange={ev=>{setFloor(ev.target.value)}}>
-                        <option value="ground">1층</option>
-                        <option value="loop">2층</option>
-                    </select>
-                </div>
-
-            </div>
-
-            {
-                floor==="ground" &&
-                <div className="ground">
-                    <div className="stage">
-                        S T A G E
+                        <select name="floor"
+                                value={floor}
+                                onChange={ev=>{setFloor(ev.target.value)}}>
+                            <option value="ground">1층</option>
+                            <option value="loop">2층</option>
+                        </select>
                     </div>
 
-                    <section>
-                        <Zone floor="ground" block="GA" FRBK="FR" key="1"/>
-                        <Zone floor="ground" block="NA" FRBK="FR" key="2"/>
-                        <Zone floor="ground" block="DA" FRBK="FR" key="3"/>
-                    </section>
-
-                    <div className="aisle">
-                        통 행 로
-                    </div>
-
-                    <section>
-                        <Zone floor="ground" block="GA" FRBK="BK" key="4"/>
-                        <Zone floor="ground" block="NA" FRBK="BK" key="5"/>
-                        <Zone floor="ground" block="DA" FRBK="BK" key="6"/>
-                    </section>
                 </div>
-            }
 
-            {
-                floor==="loop"&&
+                {
+                    floor==="ground" &&
+                    <div className="ground">
+                        <div className="stage">
+                            S T A G E
+                        </div>
+
+                        <section>
+                            <Zone floor="ground" block="GA" FRBK="FR" key="1"/>
+                            <Zone floor="ground" block="NA" FRBK="FR" key="2"/>
+                            <Zone floor="ground" block="DA" FRBK="FR" key="3"/>
+                        </section>
+
+                        <div className="aisle">
+                            통 행 로
+                        </div>
+
+                        <section>
+                            <Zone floor="ground" block="GA" FRBK="BK" key="4"/>
+                            <Zone floor="ground" block="NA" FRBK="BK" key="5"/>
+                            <Zone floor="ground" block="DA" FRBK="BK" key="6"/>
+                        </section>
+                    </div>
+                }
+
+                {
+                    floor==="loop"&&
                     <div className="loop">
                         <div className="stage">
                             S T A G E
@@ -101,15 +97,17 @@ const Booking = props =>{
                             <Zone floor="loop" block="LA" FRBK="BK" key="14"/>
                         </section>
                     </div>
-            }
+                }
 
-            <div className="btn-wrapper">
-                <button onClick={()=>onRegisterSeatList()}>
-                    예약
-                </button>
+                <div className="btn-wrapper">
+                    <button onClick={()=>setIsDisplayModal("show")}>
+                        예약
+                    </button>
+                </div>
+
             </div>
-
         </div>
+
     )
 };
 

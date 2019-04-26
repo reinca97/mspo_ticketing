@@ -13,6 +13,9 @@ import Intro from "./Components/Intro";
 import SignIn from "./Components/SignIn";
 import CheckAuth from "./Components/CheckAuth";
 
+
+
+
 const App = props =>{
     // const database = firebase.database();
     // const storageRef = database.ref();
@@ -22,15 +25,15 @@ const App = props =>{
 
     useEffect( ()=>{
         appInit();
-
     },[]);
 
 
     const appInit = async() =>{
-        const list = await onGetDataList();
-        dispatch( setGetDataList(list) );
-
+        const DATA = await onGetDataList();
+        dispatch( setGetDataList(DATA) );
+        //dispatch userInfo here (DATA.users)
     };
+
 
 
 

@@ -1,0 +1,38 @@
+.seat{
+    display:block;
+    float:left;
+    text-align: center;
+    width:20px; height:20px;
+    border-radius:2px;
+    margin-right:2px;
+    margin-top:4px;
+
+    &.reserved{
+        background-color: #8a8a8a;
+        cursor: not-allowed;
+
+        &:hover{
+            background-color: #8a8a8a;
+        }
+    }
+
+    &.empty{
+        background-color: #1b1b1b;
+        cursor: default;
+    }
+
+    &.valid{
+        background-color:#881a37;
+        color:#ffffff;
+        cursor:pointer;
+
+        &:hover{
+            background-color: #a91e41;
+        }
+
+        &.selected{
+            background-color: #ffacbd;
+        }
+    }
+
+}

@@ -3,7 +3,6 @@ import {Context} from "../../Reducers";
 import {columns, emptySeatsIndex,numberOfSeats,startSeatNum} from "../../lib/hallData";
 import "./style.scss";
 import firebase from '../../lib/firebase';
-
 import Seat from "../Seat";
 
 const database = firebase.database();
@@ -11,8 +10,7 @@ const database = firebase.database();
 const Zone = props =>{
     const {store, dispatch} = useContext(Context);
     const [dataList, setDataList] = useState([null]);
-    const [selectedSeats, selectSeats] = useState([]);
-    const [isSelected, setIsSelected] = useState(false);
+
 
    useEffect( ()=>{
        //***use only init whole database***
@@ -23,7 +21,8 @@ const Zone = props =>{
 
        const currentData = store.totalSeatList;
        if(currentData){
-           setDataList(currentData.seats[props.floor][props.block][props.FRBK])
+           console.log(currentData[props.floor][props.block][props.FRBK])
+           setDataList(currentData[props.floor][props.block][props.FRBK])
        }
 
    },[store.totalSeatList]);
@@ -58,7 +57,6 @@ const Zone = props =>{
     //                 date:"",
     //                 hostName:"",
     //                 guestName:"",
-    //                 tel:"",
     //                 seatNum: seatNum,
     //                 uidx:""
     //             });
@@ -75,17 +73,6 @@ const Zone = props =>{
     //***********************************
 
 
-
-    const editSeatInfo = (seatData, userData) =>{
-        firebase.database().ref(`seats/${seatData.floor}` + `/${seatData.block}`+`/${seatData.FRBK}`+`/${seatData.index}`)
-        .set( userData, err =>{
-            if(err){
-                console.log(err)
-            }else{
-                console.log("success")
-            }
-        })
-    };
 
 
     const wrapperStyle ={
