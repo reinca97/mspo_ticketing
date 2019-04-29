@@ -3,8 +3,8 @@ import {Context} from "../../Reducers";
 import "./style.scss";
 import Zone from "../Zone";
 import firebase from "firebase";
-import {setUserData} from "../../Actions";
-import {editSeatInfo} from "../../lib/getHallData";
+import {setGetDataList, setUserData, setSelectedSeatsData} from "../../Actions";
+import {editSeatInfo, onGetDataList} from "../../lib/getHallData";
 
 
 const Modal_Booking = props =>{
@@ -24,29 +24,55 @@ const Modal_Booking = props =>{
     const onRegisterBooking = ev =>{
         ev.preventDefault();
 
-
         if(window.confirm(`좌석을 예약 하시겠습니까?`)){
             window.alert("---현재는 예약 가능한 기간이 아닙니다----");
             if(!store.userData.token){
                 return window.alert("비정상적인 접근입니다. 새로고침 및 로그인 후 예약 바랍니다.")
             }
-            console.log(guestName);
-            console.log(hostName);
-            console.log(store.userData.phoneNumber);
-            console.log(store.userData.token);
 
             Object.keys(store.selectedSeatsData).forEach(data=> {
                 if (store.selectedSeatsData[data]) {
                     const tempArr = data.split("_");
-                    const userData = {
-                        uidx: store.userData.token,
-                        guestName: guestName,
-                        hostName: hostName,
-                        // seatNum: tempArr[3]
-                    };
+                    let zoneList=[];
 
-                    const postKey = firebase.database().ref().child('seats').push().key;
-                    console.log(postKey);
+                    firebase.database()
+                        .ref(`seats/${tempArr[0]}/${tempArr[1]}/${tempArr[2]}`)
+                        .once('value').then(resolve => {
+                        zoneList = resolve.val();
+
+                        for(let i=0;i<zoneList.length;i++){
+                            if( zoneList[i].seatNum === Number(tempArr[3]) ){
+                                console.log(zoneList[i]);
+
+                                if(zoneList[i].uid){
+                                    return window.alert(
+                                        `${tempArr} 자리가 이미 예약되어있습니다. 다시 시도해주세요.`
+                                    )
+                                }else{
+                                    const userData ={
+                                        uid:store.userData.token,
+                                        tel:store.userData.phoneNumber,
+                                        host:hostName,
+                                        guest:guestName,
+                                        seatNum:zoneList[i].seatNum
+                                    };
+
+                                    firebase.database()
+                                        .ref(`seats/${tempArr[0]}/${tempArr[1]}/${tempArr[2]}/${i}`)
+                                        .set(userData).then(err=> {
+                                            if(err){ console.log(err)}else{
+                                                console.log("fulfilled")
+                                            }
+                                        onGetDataList().then(DATA => {
+                                            dispatch( setGetDataList(DATA) );
+                                            dispatch(setSelectedSeatsData({}))
+                                        });
+
+                                    })
+                                }
+                            }
+                        }
+                    })
                 }
             })
 
@@ -78,8 +104,8 @@ const Modal_Booking = props =>{
                                     seatInfoArr[0] = "2"
                                 }
                                 return (
-                                    <li>
-                                        {`${seatInfoArr[0]}층 ${seatInfoArr[1]}열 층 ${seatInfoArr[3]}번 좌석`}
+                                    <li key={data}>
+                                        {`${seatInfoArr[0]}층 ${seatInfoArr[1]}열 ${seatInfoArr[3]}번 좌석`}
                                     </li>
                                 )
                             }
@@ -92,7 +118,7 @@ const Modal_Booking = props =>{
                     <div>
                         예약자 성함
                         <input type="text"
-                               placeholder="김우엉"
+                               placeholder=" 우엉이 "
                                onChange={ev=>setHostName(ev.target.value)}
                         />
                     </div>
@@ -100,7 +126,7 @@ const Modal_Booking = props =>{
                     <div>
                         초대받는 분 성함
                         <input type="text"
-                               placeholder="이꼬미"
+                               placeholder=" 꼬미 "
                                onChange={ev=>setGuestName(ev.target.value)}
 
                         />

@@ -13,7 +13,7 @@ const Zone = props =>{
 
 
    useEffect( ()=>{
-       //***use only init whole database***
+       // ***use only init whole database***
        // const tempDataList = initDataList();
        // setDataList(tempDataList);
        // writeUserData(tempDataList);
@@ -21,7 +21,6 @@ const Zone = props =>{
 
        const currentData = store.totalSeatList;
        if(currentData){
-           console.log(currentData[props.floor][props.block][props.FRBK])
            setDataList(currentData[props.floor][props.block][props.FRBK])
        }
 
@@ -34,42 +33,42 @@ const Zone = props =>{
     const seatInfoStr = `${props.floor}_${props.block}_${props.FRBK}`;
 
     //***use only init whole database***
-    // const initDataList = () =>{
-    //     const seatsCount = ESI===null? NOS : NOS+ESI.length;
-    //     let seatList = [];
-    //
-    //     let seatNum = SSN;
-    //     let currentEmptySeatIndex = 0;
-    //
-    //     for(let i=0; i<seatsCount; i++){
-    //
-    //         if(ESI !==null && i === ESI[currentEmptySeatIndex] ){
-    //
-    //             seatList.push ({
-    //                 hostName:"no-one",
-    //                 guestName:"no-one",
-    //                 seatNum: null,
-    //             }) ;
-    //
-    //             currentEmptySeatIndex++;
-    //         } else{
-    //             seatList.push({
-    //                 date:"",
-    //                 hostName:"",
-    //                 guestName:"",
-    //                 seatNum: seatNum,
-    //                 uidx:""
-    //             });
-    //             seatNum++;
-    //         }
-    //     }
-    //
-    //     return seatList;
-    // };
-    // const  writeUserData = list => {
-    //     firebase.database().ref(`seats/${props.floor}` + `/${props.block}`+`/${props.FRBK}` )
-    //         .set(list);
-    // };
+    const initDataList = () =>{
+        const seatsCount = ESI===null? NOS : NOS+ESI.length;
+        let seatList = [];
+
+        let seatNum = SSN;
+        let currentEmptySeatIndex = 0;
+
+        for(let i=0; i<seatsCount; i++){
+
+            if(ESI !==null && i === ESI[currentEmptySeatIndex] ){
+
+                seatList.push ({
+                    hostName:"no-one",
+                    guestName:"no-one",
+                    seatNum: null,
+                }) ;
+
+                currentEmptySeatIndex++;
+            } else{
+                seatList.push({
+                    date:"",
+                    hostName:"",
+                    guestName:"",
+                    seatNum: seatNum,
+                    uid:""
+                });
+                seatNum++;
+            }
+        }
+
+        return seatList;
+    };
+    const  writeUserData = list => {
+        firebase.database().ref(`seats/${props.floor}` + `/${props.block}`+`/${props.FRBK}` )
+            .set(list);
+    };
     //***********************************
 
 
