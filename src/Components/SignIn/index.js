@@ -8,7 +8,7 @@ import "./style.scss"
 
 firebase.auth().languageCode = 'KR';
 const uiConfig = {
-    signInSuccessUrl: 'http://localhost:4000/check-auth',
+    signInSuccessUrl: 'http://elegant-khorana-12ef8b.netlify.com/check-auth',
     signInOptions: [
         {
             provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
