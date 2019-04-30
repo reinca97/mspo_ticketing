@@ -7,8 +7,12 @@ import {setUserData} from "../../Actions";
 import "./style.scss"
 
 firebase.auth().languageCode = 'KR';
+
+// Initialize the FirebaseUI Widget using Firebase.
+const ui = new firebaseui.auth.AuthUI(firebase.auth());
+// The start method will wait until the DOM is loaded.
 const uiConfig = {
-    signInSuccessUrl: '/check-auth',
+    signInSuccessUrl: '/booking',
     signInOptions: [
         {
             provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
@@ -20,21 +24,47 @@ const uiConfig = {
             defaultCountry: 'KR',
             defaultNationalNumber: '010',
             loginHint: '+11234567890',
-            whitelistedCountries: ['KR','+81','GB','US']
+            whitelistedCountries: ['KR','+81','US']
         }
-    ]
+    ],
+    callbacks: {
+        signInSuccessWithAuthResult: authResult=> {
+            // Process result. This will not trigger on merge conflicts.
+            // On success redirect to signInSuccessUrl.
+            return true
+        }
+    }
 };
-// Initialize the FirebaseUI Widget using Firebase.
-const ui = new firebaseui.auth.AuthUI(firebase.auth());
-// The start method will wait until the DOM is loaded.
-
 
 const SignIn = props =>{
     const {store, dispatch} = useContext(Context);
 
     useEffect( ()=> {
         ui.start('#firebaseui-auth-container', uiConfig);
+        initApp();
+
     },[]);
+
+
+    const  initApp = ()=> {
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.\
+                user.getIdToken().then(accessToken=> {
+
+                    dispatch(setUserData({
+                        token:accessToken,
+                        phoneNumber:user.phoneNumber,
+                        uid:user.uid
+                    }));
+                });
+            } else {
+                return window.alert("인증이 정상적으로 이루어지지 않았습니다. 새로고침 후 다시 시도해주세요")
+            }
+        }, function(error) {
+            console.log(error);
+        });
+    };
 
 
 

@@ -1,6 +1,6 @@
 import {
     SET_DATA_LIST,
-    SET_SELECTED_SEAT_DATA,
+    SET_SELECTED_SEAT_DATA, SET_USER_BOOKING_LIST,
     SET_USER_DATA
 } from '../Constants';
 import React from 'react';
@@ -11,8 +11,10 @@ export const initialState = {
     selectedSeatsData:{},
     userData:{
         token:"",
-        phoneNumber:""
-    }
+        phoneNumber:"",
+        uid:""
+    },
+    userBookingList:[]
 };
 
 
@@ -34,6 +36,12 @@ export const reducer = (state,action)=>{
             return{
                 ...state,
                 userData:action.userData
+            };
+
+        case SET_USER_BOOKING_LIST:
+            return{
+                ...state,
+                userBookingList: action.userBookingList
             };
 
         default: return state;

@@ -4,7 +4,7 @@ import "./style.scss";
 import Zone from "../Zone";
 import firebase from "firebase";
 import {setGetDataList, setUserData, setSelectedSeatsData} from "../../Actions";
-import {editSeatInfo, onGetDataList} from "../../lib/getHallData";
+import { onGetDataList, getSeatData, setSeatData} from "../../lib/getHallData";
 
 
 const Modal_Booking = props =>{
@@ -21,64 +21,103 @@ const Modal_Booking = props =>{
         props.setIsDisplayModal("");
     };
 
-    const onRegisterBooking = ev =>{
+
+    const onRegisterBooking = (ev) =>{
         ev.preventDefault();
 
-        if(window.confirm(`좌석을 예약 하시겠습니까?`)){
-            window.alert("---현재는 예약 가능한 기간이 아닙니다----");
-            if(!store.userData.token){
-                return window.alert("비정상적인 접근입니다. 새로고침 및 로그인 후 예약 바랍니다.")
+        if(!guestName || !hostName){
+            return window.alert("예약자와 초대받는 분 성함을 입력해야 합니다.")
+        }
+
+        if(!store.userData.token){
+            return window.alert("비정상적인 접근입니다. 새로고침 및 로그인 후 예약 바랍니다.")
+        }
+
+        if(!window.confirm(`좌석을 예약 하시겠습니까?`)){
+            return window.alert("취소 되었습니다.");
+        }
+
+
+        //set object to array before start
+        let selectedSeatsList = [];
+        Object.keys(store.selectedSeatsData).forEach(key =>{
+            if(store.selectedSeatsData[key]){
+                    selectedSeatsList.push(key);
+            }
+        });
+
+        //*******write seats data*******// Do every selected seats (max 10 times)
+        selectedSeatsList.forEach(async(data)=> {
+            const seatDataArr = data.split("_");
+
+            let path=`seats/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
+            const DBseatList = await getSeatData(path);
+
+            console.log(DBseatList);
+
+            //search in DB (max 95 times / ground-Na-Bk block )
+
+
+
+
+            for(let i=0;i<DBseatList.length;i++){
+                if(DBseatList[i].seatNum === Number(seatDataArr[3])){
+                    if(DBseatList[i].uid){
+                        window.alert(`${data} 자리가 이미 예약되어 있십니다. 다시 시도해주세요.`)
+                    }else{
+                        const seatData ={
+                            uid:store.userData.token,
+                            tel:store.userData.phoneNumber,
+                            host:hostName,
+                            guest:guestName,
+                            seatNum:DBseatList[i].seatNum
+                        };
+
+                        path = path+`/${i}`;
+                        setSeatData(path, seatData).then((result,err)=>{
+                            if(err){ console.log(err);}else{
+                                return window.alert("등록이 완료되었습니다.")
+                            }
+                        });
+
+                        onGetDataList().then(DATA => {
+                            dispatch( setGetDataList(DATA) );
+                            dispatch(setSelectedSeatsData({}))
+                        });
+
+                    }
+                    break;
+                }
             }
 
-            Object.keys(store.selectedSeatsData).forEach(data=> {
-                if (store.selectedSeatsData[data]) {
-                    const tempArr = data.split("_");
-                    let zoneList=[];
 
-                    firebase.database()
-                        .ref(`seats/${tempArr[0]}/${tempArr[1]}/${tempArr[2]}`)
-                        .once('value').then(resolve => {
-                        zoneList = resolve.val();
 
-                        for(let i=0;i<zoneList.length;i++){
-                            if( zoneList[i].seatNum === Number(tempArr[3]) ){
-                                console.log(zoneList[i]);
+            });
 
-                                if(zoneList[i].uid){
-                                    return window.alert(
-                                        `${tempArr} 자리가 이미 예약되어있습니다. 다시 시도해주세요.`
-                                    )
-                                }else{
-                                    const userData ={
-                                        uid:store.userData.token,
-                                        tel:store.userData.phoneNumber,
-                                        host:hostName,
-                                        guest:guestName,
-                                        seatNum:zoneList[i].seatNum
-                                    };
+            //*******write user data*******//
+            const USERS = firebase.database().ref(`users/${store.userData.uid}`);
+            const userData ={
+                tel:store.userData.phoneNumber,
+                host:hostName,
+                guest:guestName,
+                seats:[...selectedSeatsList]
+            };
 
-                                    firebase.database()
-                                        .ref(`seats/${tempArr[0]}/${tempArr[1]}/${tempArr[2]}/${i}`)
-                                        .set(userData).then(err=> {
-                                            if(err){ console.log(err)}else{
-                                                console.log("fulfilled")
-                                            }
-                                        onGetDataList().then(DATA => {
-                                            dispatch( setGetDataList(DATA) );
-                                            dispatch(setSelectedSeatsData({}))
-                                        });
+            USERS.once('value').then( snapshot =>{
+                const fbUserData= snapshot.val()||[];
+                    //make new userData item
+                USERS.set(
+                    [...fbUserData, userData]
+                ).then(response=>
+                        console.log("set success!",response)
+                    , err=>{
+                        console.log("rejected",err)
+                });
 
-                                    })
-                                }
-                            }
-                        }
-                    })
-                }
-            })
+            });
 
-        }else{
-            window.alert("잘 생각하셨습니다.")
-        }
+
+
         props.setIsDisplayModal("");
     };
 

@@ -19,7 +19,16 @@ const Booking = props =>{
 
     },[]);
 
-
+    const onDisplayBookingModal = () =>{
+        let validator = false;
+        Object.values(store.selectedSeatsData).forEach( value=> {
+            if(value){validator=true;}
+        });
+        if(!validator){
+            return window.alert("선택된 좌석이 없습니다.")
+        }
+        validator && setIsDisplayModal("show")
+    };
 
     return(
         <div>
@@ -100,7 +109,7 @@ const Booking = props =>{
                 }
 
                 <div className="btn-wrapper">
-                    <button onClick={()=>setIsDisplayModal("show")}>
+                    <button onClick={()=>onDisplayBookingModal()}>
                         예약
                     </button>
                 </div>

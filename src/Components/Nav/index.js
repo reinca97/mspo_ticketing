@@ -32,7 +32,7 @@ const Nav = props =>{
                     <Link to="/">HOME</Link>
                 </li>
                 <li>
-                    <Link to="/sign-in">좌석 예매하기</Link>
+                    <Link to="/booking">좌석 예매하기</Link>
                 </li>
                 <li>
                     <Link to="/my-reservation">내 자리 확인하기</Link>
