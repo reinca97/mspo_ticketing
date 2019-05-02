@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {Context} from "../../Reducers";
 import {  Link, Redirect } from "react-router-dom";
 import "./style.scss"
 import firebase from "firebase";
 
-import {setUserData} from "../../Actions";
+import {setUserData,onSetIsLogin} from "../../Actions";
 
 const Nav = props =>{
     const {store, dispatch} = useContext(Context);
@@ -16,8 +16,8 @@ const Nav = props =>{
                 token:"",
                 phoneNumber:""
             }));
+           dispatch(onSetIsLogin(false));
             window.alert("정상적으로 로그아웃 되었습니다.");
-
         }).catch(function(error) {
             // An error happened.
             console.log(error);
@@ -31,23 +31,35 @@ const Nav = props =>{
                 <li>
                     <Link to="/">HOME</Link>
                 </li>
-                <li>
-                    <Link to="/booking">좌석 예매하기</Link>
-                </li>
-                <li>
-                    <Link to="/my-reservation">내 자리 확인하기</Link>
-                </li>
+                {
+                    store.isLogin &&
+                    <li>
+                        <Link to="/booking">좌석 예매하기</Link>
+                    </li>
+                }
+                {
+                    store.isLogin &&
+                    <li>
+                        <Link to="/my-reservation">나의 예약 현황</Link>
+                    </li>
+                }
+                {
+                    store.isLogin?
+                        (
+                            <li onClick={()=>signOut()}>
+                                <Link to ="/">
+                                    sign out
+                                </Link>
+                            </li>
+                        ):(
+                            <li>
+                                <Link to="/sign-in">로그인</Link>
+                            </li>
+                        )
+                }
                 <li>
                     <Link to="/admin">ADMIN</Link>
                 </li>
-                {
-                    store.userData.token!=="" &&
-                    <li>
-                        <button onClick={()=>signOut()}>
-                            sign out
-                        </button>
-                    </li>
-                }
             </ul>
         </div>
     )

@@ -3,17 +3,29 @@ import {Context} from "../../Reducers";
 import "./style.scss";
 import Zone from "../Zone";
 import firebase from "firebase";
-import {setGetDataList, setUserData, setSelectedSeatsData} from "../../Actions";
-import { onGetDataList, getSeatData, setSeatData} from "../../lib/getHallData";
+import {
+    setGetDataList,
+    setSelectedSeatsData
+} from "../../Actions";
+import {
+    onGetDataList,
+    getSeatData,
+    setSeatData,
+    getUserData,
+    setUserData
+} from "../../lib/getHallData";
 
 
 const Modal_Booking = props =>{
     const {store, dispatch} = useContext(Context);
     const [guestName, setGuestName] = useState("");
     const [hostName, setHostName] = useState("");
+    const [userBookingList, setUserBookingList] = useState([]);
 
     useEffect(()=>{
-
+        getUserData(store.userData.uid).then(list =>{
+            setUserBookingList(list||[]);
+        });
     },[]);
 
     const onCancelBooking = ev =>{
@@ -24,19 +36,36 @@ const Modal_Booking = props =>{
 
     const onRegisterBooking = (ev) =>{
         ev.preventDefault();
+        console.log(userBookingList);
+        //set max booking limit here
+        let totalBookingCount =0;
+        if(userBookingList.length){
+            userBookingList.forEach( booking =>{
+                totalBookingCount = totalBookingCount+booking.seats.length;
+            });
+        }
+
+        if(totalBookingCount>=10){
+            props.setIsDisplayModal("");
+            return window.alert("이미 예약 가능한 좌석을 초과하였습니다.")
+        }else{
+            window.alert(`현재 예약 가능한 좌석은 ${10-totalBookingCount}석 입니다.`)
+        }
+
+
 
         if(!guestName || !hostName){
             return window.alert("예약자와 초대받는 분 성함을 입력해야 합니다.")
         }
 
         if(!store.userData.token){
+            props.setIsDisplayModal("");
             return window.alert("비정상적인 접근입니다. 새로고침 및 로그인 후 예약 바랍니다.")
         }
 
         if(!window.confirm(`좌석을 예약 하시겠습니까?`)){
             return window.alert("취소 되었습니다.");
         }
-
 
         //set object to array before start
         let selectedSeatsList = [];
@@ -46,25 +75,24 @@ const Modal_Booking = props =>{
             }
         });
 
+        let promiseArr = [];
         //*******write seats data*******// Do every selected seats (max 10 times)
         selectedSeatsList.forEach(async(data)=> {
             const seatDataArr = data.split("_");
-
             let path=`seats/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
+
             const DBseatList = await getSeatData(path);
 
-            console.log(DBseatList);
-
             //search in DB (max 95 times / ground-Na-Bk block )
-
-
-
-
             for(let i=0;i<DBseatList.length;i++){
                 if(DBseatList[i].seatNum === Number(seatDataArr[3])){
+
                     if(DBseatList[i].uid){
-                        window.alert(`${data} 자리가 이미 예약되어 있십니다. 다시 시도해주세요.`)
+                        return window.alert(
+                           `${data} 자리가 이미 예약되어 있십니다. 
+                           내 자리 확인하기에서 예약 내역 확인 후 다시 시도해주세요.`)
                     }else{
+
                         const seatData ={
                             uid:store.userData.token,
                             tel:store.userData.phoneNumber,
@@ -74,53 +102,49 @@ const Modal_Booking = props =>{
                         };
 
                         path = path+`/${i}`;
-                        setSeatData(path, seatData).then((result,err)=>{
-                            if(err){ console.log(err);}else{
-                                return window.alert("등록이 완료되었습니다.")
-                            }
-                        });
-
-                        onGetDataList().then(DATA => {
-                            dispatch( setGetDataList(DATA) );
-                            dispatch(setSelectedSeatsData({}))
-                        });
-
+                        promiseArr.push(setSeatData(path, seatData) );
                     }
                     break;
                 }
             }
 
+        });
 
+        //*******write user data*******//
+        const userData ={
+            tel:store.userData.phoneNumber,
+            host:hostName,
+            guest:guestName,
+            seats:[...selectedSeatsList]
+        };
 
-            });
-
-            //*******write user data*******//
-            const USERS = firebase.database().ref(`users/${store.userData.uid}`);
-            const userData ={
-                tel:store.userData.phoneNumber,
-                host:hostName,
-                guest:guestName,
-                seats:[...selectedSeatsList]
-            };
-
-            USERS.once('value').then( snapshot =>{
-                const fbUserData= snapshot.val()||[];
-                    //make new userData item
-                USERS.set(
-                    [...fbUserData, userData]
-                ).then(response=>
-                        console.log("set success!",response)
-                    , err=>{
-                        console.log("rejected",err)
+        onSetUserData(userData).then(
+            result =>{
+                console.log(result);
+                Promise.all(promiseArr).then( resolveList => {
+                    if( resolveList.length===promiseArr.length){
+                        window.alert("예약이 완료되었습니다. 나의 예약 내역 메뉴에서 확인하세요.")
+                    }
                 });
+            }
+        );
 
-            });
-
-
+        onGetDataList().then(DATA => {
+            dispatch( setGetDataList(DATA) );
+            dispatch(setSelectedSeatsData({}))
+        });
 
         props.setIsDisplayModal("");
     };
 
+    const onSetUserData = async(userData) =>{
+        let currentUserData = await getUserData(store.userData.uid)||[];
+        currentUserData = [...currentUserData, userData];
+
+        setUserData(store.userData.uid, currentUserData).then(
+            result=> result, err=> err
+        )
+    };
 
 
     return(

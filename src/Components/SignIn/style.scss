@@ -5,6 +5,13 @@
         margin-bottom:100px;
     }
 
+    .firebaseui-title,
+    .firebaseui-tos,
+    .firebaseui-phone-tos {
+        display:none;
+    }
+
+
     button{
         width:200px;
         height:40px;

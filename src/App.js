@@ -3,14 +3,17 @@ import {onGetDataList} from "./lib/getHallData";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import './App.scss';
 import {Context, initialState, reducer} from './Reducers';
-import {setGetDataList} from './Actions';
+import {onSetIsLogin, setGetDataList, setUserData} from './Actions';
 import logger from 'use-reducer-logger';
+
+import firebase from "firebase";
 
 
 import Nav from "./Components/Nav";
 import Booking from "./Components/Booking";
 import Intro from "./Components/Intro";
 import SignIn from "./Components/SignIn";
+import MyReservation from "./Components/MyReservation";
 import CheckAuth from "./Components/CheckAuth";
 
 
@@ -47,7 +50,8 @@ const App = props =>{
                         <Route exact path="/" component={Intro} />
                         <Route exact path="/booking" component={Booking} />
                         <Route exact path="/sign-in" component={SignIn} />
-                        <Route exact path="/check-auth" component={CheckAuth}/>
+                        <Route exact path="/my-reservation" component={MyReservation} />
+
                     </section>
                 </div>
             </Context.Provider>

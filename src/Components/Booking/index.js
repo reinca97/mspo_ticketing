@@ -3,10 +3,10 @@ import {Context} from "../../Reducers";
 import "./style.scss";
 import Zone from "../Zone";
 import Modal_Booking from "../Modal/Modal_Booking";
-
-import firebase from "firebase";
-import {setUserData, setGetDataList} from "../../Actions";
+import {getUserData} from "../../lib/getHallData";
 import { Redirect } from "react-router-dom";
+import firebase from "../SignIn";
+import {onSetIsLogin, setUserData} from "../../Actions";
 
 
 
@@ -15,11 +15,16 @@ const Booking = props =>{
     const [floor, setFloor] = useState("ground");
     const [isDisplayModal, setIsDisplayModal] = useState("");
 
+
     useEffect(()=>{
 
     },[]);
 
     const onDisplayBookingModal = () =>{
+        if(store.userData.token===""){
+            return window.alert("로그인 후에 이용가능합니다.")
+        }
+
         let validator = false;
         Object.values(store.selectedSeatsData).forEach( value=> {
             if(value){validator=true;}
@@ -37,10 +42,6 @@ const Booking = props =>{
                 setIsDisplayModal={setIsDisplayModal}
             />
             <div className="booking">
-                {
-                    store.userData.token ===""
-                    && <Redirect to ="sign-in" />
-                }
                 <div >
                     <div className="info">
                     <span>

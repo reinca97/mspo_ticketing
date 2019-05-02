@@ -1,12 +1,7 @@
-import React, { useContext, useEffect,useState } from 'react';
-import {Context} from "../../Reducers";
+import React from 'react';
 import "./style.scss"
 
 const Intro = props =>{
-    const {store, dispatch} = useContext(Context);
-
-    useEffect( ()=> {
-    },[]);
 
 
     return(

@@ -1,4 +1,5 @@
 import {
+    ON_SET_IS_LOGIN,
     SET_DATA_LIST,
     SET_SELECTED_SEAT_DATA, SET_USER_BOOKING_LIST,
     SET_USER_DATA
@@ -20,6 +21,12 @@ export const initialState = {
 
 export const reducer = (state,action)=>{
     switch(action.type){
+        case ON_SET_IS_LOGIN:
+            return{
+                ...state,
+                isLogin:action.isLogin
+            };
+
         case SET_DATA_LIST:
             return{
                 ...state,
