@@ -44,9 +44,10 @@ const Booking = props =>{
             <div className="booking">
                 <div >
                     <div className="info">
-                    <span>
-                         좌석을 선택 한 후 예약 버튼을 누르세요. (1인당 최대 10석 가능)
-                    </span>
+                        <h2>좌석 예매하기</h2>
+                        <span>
+                            좌석을 선택 한 후 예약 버튼을 누르세요. (1인당 최대 10석 가능)
+                        </span>
                         <select name="floor"
                                 value={floor}
                                 onChange={ev=>{setFloor(ev.target.value)}}>
@@ -63,6 +64,12 @@ const Booking = props =>{
                         <div className="stage">
                             S T A G E
                         </div>
+
+                        <section className="column-text">
+                            <div>가 열</div>
+                            <div>나 열</div>
+                            <div>다 열</div>
+                        </section>
 
                         <section>
                             <Zone floor="ground" block="GA" FRBK="FR" key="1"/>
@@ -88,7 +95,12 @@ const Booking = props =>{
                         <div className="stage">
                             S T A G E
                         </div>
-
+                        <section className="column-text">
+                            <div>가 열</div>
+                            <div>나 열</div>
+                            <div>다 열</div>
+                           <div>라 열</div>
+                        </section>
                         <section>
                             <Zone floor="loop" block="GA" FRBK="FR" key="7"/>
                             <Zone floor="loop" block="NA" FRBK="FR" key="8"/>
@@ -110,7 +122,8 @@ const Booking = props =>{
                 }
 
                 <div className="btn-wrapper">
-                    <button onClick={()=>onDisplayBookingModal()}>
+                    <button className="custom-btn go-on"
+                        onClick={()=>onDisplayBookingModal()}>
                         예약
                     </button>
                 </div>

@@ -14,7 +14,7 @@ import Booking from "./Components/Booking";
 import Intro from "./Components/Intro";
 import SignIn from "./Components/SignIn";
 import MyReservation from "./Components/MyReservation";
-import CheckAuth from "./Components/CheckAuth";
+import Admin from "./Components/Admin";
 
 
 
@@ -51,7 +51,7 @@ const App = props =>{
                         <Route exact path="/booking" component={Booking} />
                         <Route exact path="/sign-in" component={SignIn} />
                         <Route exact path="/my-reservation" component={MyReservation} />
-
+                        <Route exact path="/admin" component={Admin} />
                     </section>
                 </div>
             </Context.Provider>

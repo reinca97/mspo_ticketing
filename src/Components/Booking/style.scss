@@ -60,4 +60,17 @@
     padding-right:40px;
     box-sizing:border-box;
   }
+
+
+  .column-text{
+
+    div{
+      width:100px;
+
+      &:last-child{
+        width:60px;
+      }
+    }
+
+  }
 }

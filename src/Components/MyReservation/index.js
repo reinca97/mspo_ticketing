@@ -7,8 +7,12 @@ import {
     getUserData,
     setUserData
 } from "../../lib/getHallData";
+import {seatNameTranslator} from "../../lib/util"
 
 const database = firebase.database();
+
+
+
 
 const MyPage = props =>{
     const {store, dispatch} = useContext(Context);
@@ -27,7 +31,7 @@ const MyPage = props =>{
 
     return(
         <section className="my-page" >
-            <h2>나의 예약 현황</h2>
+            <h2>예매 내역 확인</h2>
             {
                 userDataList? (
                     <ul>
@@ -42,7 +46,7 @@ const MyPage = props =>{
                                         (총 {data.seats.length}석)
                                     </h5>
                                     {data.seats.map((seat,index) =>
-                                        <div>{index+1}. {seat} </div>
+                                        <div>{index+1}) {seatNameTranslator(seat)} </div>
                                     )}
                                 </div>
                             </li>

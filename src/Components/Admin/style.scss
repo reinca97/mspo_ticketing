@@ -1,0 +1,67 @@
+.admin{
+    h2, h4{
+        text-align:center;
+    }
+
+    .btn-wrapper{
+        text-align:center;
+    }
+
+    .admin-login{
+        margin-top:200px;
+        text-align:center;
+    }
+
+    div{
+        max-width:800px;
+        ul{
+            list-style:none;
+            margin-top:50px;
+
+            li{
+                list-style:none;
+                padding:10px;
+                border-bottom:1px solid #ffffff;
+            }
+
+            div{
+                display:inline-block;
+                min-width:200px;
+
+                span{
+                    display:block;
+                    margin:10px 0;
+                }
+            }
+
+            .seat-num{
+                display:block;
+                font-size:12px;
+                text-indent:10px;
+            }
+        }
+    }
+
+
+    .total-list{
+        background-color: #6c6c6c;
+        padding:10px;
+        border-radius:6px;
+    }
+
+    .zone-list{
+        background-color:#6c6c6c;
+        padding:10px;
+        border-radius:6px;
+        font-size:14px;
+
+        select{
+            display: block;
+            width:200px;
+            margin: 10px auto;
+            font-size:16px;
+        }
+    }
+
+
+}

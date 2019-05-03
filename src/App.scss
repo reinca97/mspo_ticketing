@@ -1,12 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Bad+Script|Nanum+Gothic|Stylish');
+
 body{
   background-color: #1b1b1b;
   color:#ffffff;
+  font-family: 'Nanum Gothic', sans-serif;
 
-
+  h2{
+    font-family: 'Stylish', sans-serif;
+  }
 
   section{
     div{
       margin: 0 auto;
+    }
+  }
+
+  .btn-wrapper{
+
+    margin:40px 0;
+
+    .custom-btn{
+      width:100px;
+      height:20px;
+      background-color:#999999;
+      color:#ffffff;
+      border-radius:4px;
+      margin:2px;
+      border:none;
+
+      &.warning{
+        background-color: #ff0050;
+      }
+
+      &.go-on{
+        background-color: #089363;
+      }
+
+      &.admit{
+        background-color: #0e93ff;
+      }
     }
   }
 }

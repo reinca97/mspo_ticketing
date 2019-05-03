@@ -1,5 +1,6 @@
 import React, { useContext, useState ,useEffect} from 'react';
 import {Context} from "../../Reducers";
+import moment from "moment";
 import "./style.scss";
 import Zone from "../Zone";
 import firebase from "firebase";
@@ -14,6 +15,8 @@ import {
     getUserData,
     setUserData
 } from "../../lib/getHallData";
+
+import {seatNameTranslator} from "../../lib/util";
 
 
 const Modal_Booking = props =>{
@@ -34,25 +37,8 @@ const Modal_Booking = props =>{
     };
 
 
-    const onRegisterBooking = (ev) =>{
+    const onRegisterBooking = ev =>{
         ev.preventDefault();
-        console.log(userBookingList);
-        //set max booking limit here
-        let totalBookingCount =0;
-        if(userBookingList.length){
-            userBookingList.forEach( booking =>{
-                totalBookingCount = totalBookingCount+booking.seats.length;
-            });
-        }
-
-        if(totalBookingCount>=10){
-            props.setIsDisplayModal("");
-            return window.alert("이미 예약 가능한 좌석을 초과하였습니다.")
-        }else{
-            window.alert(`현재 예약 가능한 좌석은 ${10-totalBookingCount}석 입니다.`)
-        }
-
-
 
         if(!guestName || !hostName){
             return window.alert("예약자와 초대받는 분 성함을 입력해야 합니다.")
@@ -75,11 +61,29 @@ const Modal_Booking = props =>{
             }
         });
 
+        //set max booking limit here
+        let totalBookingCount =selectedSeatsList.length;
+        if(userBookingList.length){
+            userBookingList.forEach( booking =>{
+                totalBookingCount = totalBookingCount+booking.seats.length;
+            });
+        }
+
+        if(totalBookingCount>10){
+            props.setIsDisplayModal("");
+            return window.alert(`이미 예약 가능한 좌석을 초과하였습니다.
+            ( 현재 ${selectedSeatsList.length} 석 예약/ 1인 최대 10석까지 가능 ) `)
+        }
+
+
+
+        const timeData = moment().format("YYYY-MM-DD hh:mm");
         let promiseArr = [];
+        console.log(selectedSeatsList);
         //*******write seats data*******// Do every selected seats (max 10 times)
         selectedSeatsList.forEach(async(data)=> {
             const seatDataArr = data.split("_");
-            let path=`seats/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
+            let path=`/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
 
             const DBseatList = await getSeatData(path);
 
@@ -98,8 +102,13 @@ const Modal_Booking = props =>{
                             tel:store.userData.phoneNumber,
                             host:hostName,
                             guest:guestName,
-                            seatNum:DBseatList[i].seatNum
+                            seatNum:DBseatList[i].seatNum,
+                            date: timeData
                         };
+
+                        console.log(seatData);
+
+
 
                         path = path+`/${i}`;
                         promiseArr.push(setSeatData(path, seatData) );
@@ -115,7 +124,8 @@ const Modal_Booking = props =>{
             tel:store.userData.phoneNumber,
             host:hostName,
             guest:guestName,
-            seats:[...selectedSeatsList]
+            seats:[...selectedSeatsList],
+            date: timeData
         };
 
         onSetUserData(userData).then(
@@ -151,24 +161,15 @@ const Modal_Booking = props =>{
         <div className={`modal-wrapper ${props.isDisplayModal}`}>
 
             <div className="modal-booking">
-                BOOKING MODAL
                 <h2>좌석 예약</h2>
-                <h4> - 선택하신 좌석 - </h4>
+                <h4> - 선택 좌석 - </h4>
                 <ul>
                     {
                         Object.keys(store.selectedSeatsData).map(data=> {
-
                             if(store.selectedSeatsData[data]){
-                                let seatInfoArr=data.split("_");
-                                //["ground","GA","FR","1"]
-                                if(seatInfoArr[0]==="ground"){
-                                    seatInfoArr[0] = "1"
-                                }else if(seatInfoArr[0]==="loop"){
-                                    seatInfoArr[0] = "2"
-                                }
                                 return (
                                     <li key={data}>
-                                        {`${seatInfoArr[0]}층 ${seatInfoArr[1]}열 ${seatInfoArr[3]}번 좌석`}
+                                        {seatNameTranslator(data)}
                                     </li>
                                 )
                             }
@@ -177,7 +178,7 @@ const Modal_Booking = props =>{
                 </ul>
 
                 <form>
-                    <h5> - 예매자 정보 입력 - </h5>
+                    <h4> - 예매자 정보 - </h4>
                     <div>
                         예약자 성함
                         <input type="text"
@@ -185,7 +186,6 @@ const Modal_Booking = props =>{
                                onChange={ev=>setHostName(ev.target.value)}
                         />
                     </div>
-
                     <div>
                         초대받는 분 성함
                         <input type="text"
@@ -197,10 +197,12 @@ const Modal_Booking = props =>{
 
 
                     <div className="btn-wrapper">
-                        <button onClick={ev=>onCancelBooking(ev)}>
+                        <button className="custom-btn"
+                            onClick={ev=>onCancelBooking(ev)}>
                             취소
                         </button>
-                        <button  onClick={ev=>onRegisterBooking(ev)}>
+                        <button  className="custom-btn admit"
+                            onClick={ev=>onRegisterBooking(ev)}>
                             예약
                         </button>
                     </div>

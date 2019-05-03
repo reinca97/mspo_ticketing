@@ -7,14 +7,18 @@
         text-align: center;
     }
 
+    h5{
+        margin:10px 0;
+    }
+
     ul{
         list-style:none;
 
         li{
-            border: 1px solid #ffffff;
-            padding:5px;
-            margin-bottom:5px;
-
+            background-color: #878787;
+            padding:20px;
+            margin-bottom:10px;
+            border-radius:4px;
             .seat-num{
                 max-width:800px;
             }

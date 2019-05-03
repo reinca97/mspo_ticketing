@@ -13,7 +13,7 @@ export const onGetDataList = () => {
 export const getSeatData = (path) =>{
 
     return new Promise( resolve =>{
-        firebase.database().ref(`${path}`).once('value')
+        firebase.database().ref(`/seats${path}`).once('value')
             .then( snapshot => resolve(snapshot.val() )
             );
     });
@@ -23,7 +23,7 @@ export const getSeatData = (path) =>{
 export const setSeatData = (path, seatData) =>{
 
     return new Promise( resolve =>{
-        firebase.database().ref(`${path}`).set(seatData).then(
+        firebase.database().ref(`/seats${path}`).set(seatData).then(
             result=>resolve(result),
                 err=>resolve(null,err)
         )

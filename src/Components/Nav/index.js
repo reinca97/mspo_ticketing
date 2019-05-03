@@ -29,7 +29,7 @@ const Nav = props =>{
         <div className="Nav">
             <ul>
                 <li>
-                    <Link to="/">HOME</Link>
+                    <Link to="/">처음으로</Link>
                 </li>
                 {
                     store.isLogin &&
@@ -48,7 +48,7 @@ const Nav = props =>{
                         (
                             <li onClick={()=>signOut()}>
                                 <Link to ="/">
-                                    sign out
+                                    로그아웃
                                 </Link>
                             </li>
                         ):(
@@ -58,7 +58,7 @@ const Nav = props =>{
                         )
                 }
                 <li>
-                    <Link to="/admin">ADMIN</Link>
+                    <Link to="/admin">관리자 페이지</Link>
                 </li>
             </ul>
         </div>
