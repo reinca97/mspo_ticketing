@@ -19,9 +19,9 @@ export const seatNameTranslator = seatName =>{
         result = result+" 라 열";
     }
 
-    return `${result} ${tempArr[3]}번 좌석`;
+    return `${result} ${tempArr[3]}번`;
 };
 
 export const telNumTranslator = telNumStr =>{
-  return "0"+telNumStr.slice(3);
+  return"0"+telNumStr.slice(3,5)+"-"+telNumStr.slice(5,9)+"-"+telNumStr.slice(9);
 };

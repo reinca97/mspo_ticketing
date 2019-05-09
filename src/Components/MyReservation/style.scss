@@ -1,6 +1,6 @@
 .my-page{
 
-    div{
+    &>div{
         margin:0 auto;
         width: 800px;
     }
@@ -19,17 +19,18 @@
         list-style:none;
 
         li{
-            padding:20px;
+            padding:10px;
             margin-bottom:10px;
             border-top:1px solid #ffffff;
             box-shadow: 1px 1px 4px gray;
 
+            button.warning{
+                margin-top:6px;
+            }
+
             .seat-num{
                 max-width:800px;
-                div{
-                    text-indent:20px;
-                    font-size:14px;
-                }
+                font-size:14px;
             }
 
             span{

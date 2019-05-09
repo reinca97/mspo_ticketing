@@ -62,25 +62,23 @@ const Modal_Booking = props =>{
         });
 
         //set max booking limit here
-        let totalBookingCount =selectedSeatsList.length;
+        let currentBookingCount = 0;
         if(userBookingList.length){
             userBookingList.forEach( booking =>{
-                totalBookingCount = totalBookingCount+booking.seats.length;
+                currentBookingCount = currentBookingCount+ booking.seats.length;
             });
         }
 
         //set booking limit here
-        if(totalBookingCount>10){
+        if(currentBookingCount+ selectedSeatsList.length >10){
             props.setIsDisplayModal("");
             return window.alert(`이미 예약 가능한 좌석을 초과하였습니다.
-            ( 현재 ${selectedSeatsList.length} 석 예약/ 1인 최대 10석까지 가능 ) `)
+            ( 현재까지 ${currentBookingCount} 석 예약 / 1인 최대 10석까지 가능 ) `)
         }
-
-
 
         const timeData = moment().format("YYYY-MM-DD hh:mm");
         let promiseArr = [];
-        console.log(selectedSeatsList);
+
         //*******write seats data*******// Do every selected seats (max 10 times)
         selectedSeatsList.forEach(async(data)=> {
             const seatDataArr = data.split("_");
@@ -94,7 +92,7 @@ const Modal_Booking = props =>{
 
                     if(DBseatList[i].uid){
                         return window.alert(
-                           `${data} 자리가 이미 예약되어 있십니다. 
+                           `${data} 자리가 이미 예약되어 있십니다.
                            내 자리 확인하기에서 예약 내역 확인 후 다시 시도해주세요.`)
                     }else{
 

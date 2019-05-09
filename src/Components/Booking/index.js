@@ -3,12 +3,6 @@ import {Context} from "../../Reducers";
 import "./style.scss";
 import Zone from "../Zone";
 import Modal_Booking from "../Modal/Modal_Booking";
-import {getUserData} from "../../lib/getHallData";
-import { Redirect } from "react-router-dom";
-import firebase from "../SignIn";
-import {onSetIsLogin, setUserData} from "../../Actions";
-
-
 
 const Booking = props =>{
     const {store, dispatch} = useContext(Context);

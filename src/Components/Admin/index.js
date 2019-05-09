@@ -8,7 +8,7 @@ import {
     setUserData,
     getSeatData
 } from "../../lib/getHallData";
-import {seatNameTranslator,telNumTranslator} from "../../lib/util"
+import {seatNameTranslator, telNumTranslator} from "../../lib/util"
 import TotalList from "./TotalList";
 import ZoneList from "./ZoneList";
 import exportFromJSON from 'export-from-json'
@@ -41,7 +41,7 @@ const Admin = props =>{
                     let tempList = [];
                     Object.keys(result).forEach(key =>{
                         if(key.indexOf("checkAuth")===-1){
-                            tempList = [...tempList, result[key] ];
+                            tempList = [...tempList, ...result[key] ];
                         }
                     });
                     setTotalUserList(tempList);
@@ -63,7 +63,6 @@ const Admin = props =>{
             const loopDA = [...result.loop.DA.FR,...result.loop.DA.BK];
             const loopLA = [...result.loop.LA.FR,...result.loop.LA.BK];
 
-            console.log(groundGA);
             setTotalSeatList({
                 groundGA:groundGA,
                 groundNA:groundNA,
@@ -82,16 +81,29 @@ const Admin = props =>{
     };
 
     const onDownloadBookingList = () =>{
-        const data =[]; //booking list here
-
-        if(!data.length){
+        if(!totalUserList.length){
             return window.alert("예약 내역이 없습니다.")
         }
+        let result= [];
+        totalUserList.forEach( data =>{
+            const userData = {
+                guest:data.guest,
+                host:data.host,
+                tel:telNumTranslator(data.tel),
+            };
+            data.seats.forEach( seat =>{
+                result.push({
+                    ...userData,
+                    seat : seatNameTranslator(seat)
+                })
+            })
+        });
 
-        const fileName = 'download';
+        const data = result;
+        const fileName = 'BookingList';
         const exportType = 'xls';
-        exportFromJSON({ data, fileName, exportType })
 
+        exportFromJSON({ data, fileName, exportType })
     };
 
     return(
@@ -124,12 +136,17 @@ const Admin = props =>{
                                     <button className="custom-btn go-on"
                                             onClick={()=>setMode("show-all")}
                                     >
-                                        예매 건 별로 보기
+                                        건별 보기
                                     </button>
                                     <button className="custom-btn go-on"
                                             onClick={()=>setMode("filter-by-zone")}
                                     >
-                                        구역 별로 보기
+                                        구역 별 보기
+                                    </button>
+                                    <button className="custom-btn admit"
+                                            onClick={()=>onDownloadBookingList()}
+                                    >
+                                        엑셀 다운로드
                                     </button>
                                 </div>
                                 {
