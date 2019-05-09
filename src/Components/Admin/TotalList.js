@@ -18,21 +18,21 @@ const TotalList = props =>{
                     userData.map( data=>
                         <li>
                             <div>
-                                초대자 :{data.host}
+                                ▷ 초대자 :{data.host}
                             </div>
                             <div>
-                                손님: {data.guest}
+                                ▷ 손님: {data.guest}
                             </div>
                             <div>
-                                연락처: {telNumTranslator(data.tel)}
+                                ▷ 연락처: {telNumTranslator(data.tel)}
                             </div>
                             <div>
-                                예약일시: {data.date}
+                                ▷ 예약일시: {data.date}
                             </div>
                             <br/>
                             <div>
                                 <span>
-                                    예약한 좌석 (총 {data.seats.length}석)
+                                    ▷ 예약한 좌석 ( 총 {data.seats.length}석 )
                                 </span>
                                 {data.seats.map(seat =>
                                         <div className="seat-num">

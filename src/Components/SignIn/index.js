@@ -69,7 +69,7 @@ const SignIn = props =>{
 
 
     return(
-        <div className="sign-in">
+        <div className="sign-in background-gradation">
             {
                 store.userData.token !=="" ?
                     (

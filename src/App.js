@@ -44,13 +44,12 @@ const App = props =>{
 
 
 
-
     return (
         <Context.Provider value={ {store, dispatch} }>
 
             {isMobile? (
-                <Route exact path="/mobile" component={Mobile}/>
-                ):(
+                <Route exact path="/" component={Mobile} />
+            ):(
                 <div className="App">
                     <Route path="/" component={Nav} />
                     <section>
@@ -61,8 +60,7 @@ const App = props =>{
                         <Route exact path="/admin" component={Admin} />
                     </section>
                 </div>
-            )
-        }
+            )}
 
         </Context.Provider>
     )

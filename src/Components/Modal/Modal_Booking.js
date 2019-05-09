@@ -109,8 +109,6 @@ const Modal_Booking = props =>{
 
                         console.log(seatData);
 
-
-
                         path = path+`/${i}`;
                         promiseArr.push(setSeatData(path, seatData) );
                     }
@@ -183,14 +181,14 @@ const Modal_Booking = props =>{
                     <div>
                         예약자 성함
                         <input type="text"
-                               placeholder=" 우엉이 "
+                               placeholder=" 조인성 "
                                onChange={ev=>setHostName(ev.target.value)}
                         />
                     </div>
                     <div>
                         초대받는 분 성함
                         <input type="text"
-                               placeholder=" 꼬미 "
+                               placeholder=" 정우성 "
                                onChange={ev=>setGuestName(ev.target.value)}
 
                         />
