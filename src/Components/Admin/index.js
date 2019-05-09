@@ -11,8 +11,8 @@ import {
 import {seatNameTranslator,telNumTranslator} from "../../lib/util"
 import TotalList from "./TotalList";
 import ZoneList from "./ZoneList";
+import exportFromJSON from 'export-from-json'
 
-const database = firebase.database();
 
 const Admin = props =>{
     const {store, dispatch} = useContext(Context);
@@ -81,15 +81,29 @@ const Admin = props =>{
         (password==="1234")&&setHide(false);
     };
 
+    const onDownloadBookingList = () =>{
+        const data =[]; //booking list here
+
+        if(!data.length){
+            return window.alert("예약 내역이 없습니다.")
+        }
+
+        const fileName = 'download';
+        const exportType = 'xls';
+        exportFromJSON({ data, fileName, exportType })
+
+    };
+
     return(
-        <section className="admin" >
+        <section className="admin background-gradation" >
             {
                 hide &&
-                <div className="admin-login">
+                <div className="admin-login btn-wrapper">
                     <input type="text"
                            onChange={ev=>setPassword(ev.target.value)}
                            placeholder="관리자용 비밀번호 입력"/>
-                    <button onClick={()=>adminLogin()}>관리자로 로그인</button>
+                    <button className="custom-btn go-on"
+                        onClick={()=>adminLogin()}>관리자로 로그인</button>
                 </div>
             }
 

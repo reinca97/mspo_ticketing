@@ -1,14 +1,13 @@
-import React,{ useReducer, useEffect } from 'react';
+import React,{ useReducer, useEffect, useState } from 'react';
 import {onGetDataList} from "./lib/getHallData";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import './App.scss';
 import {Context, initialState, reducer} from './Reducers';
 import {onSetIsLogin, setGetDataList, setUserData} from './Actions';
 import logger from 'use-reducer-logger';
 
-import firebase from "firebase";
 
-
+import Mobile from "./Components/Mobile";
 import Nav from "./Components/Nav";
 import Booking from "./Components/Booking";
 import Intro from "./Components/Intro";
@@ -19,15 +18,14 @@ import Admin from "./Components/Admin";
 
 
 
-const App = props =>{
-    // const database = firebase.database();
-    // const storageRef = database.ref();
-    // const main =storageRef.child("main");
 
+const App = props =>{
     const [store, dispatch] = useReducer( logger(reducer), initialState);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect( ()=>{
         appInit();
+        checkMobile();
     },[]);
 
 
@@ -37,13 +35,22 @@ const App = props =>{
         //dispatch userInfo here (DATA.users)
     };
 
+    const checkMobile = () =>{
+        const browserInfo=navigator.userAgent;
+        if(browserInfo.indexOf("Mobile") !==-1){
+            setIsMobile(true);
+        }
+    };
 
 
 
 
     return (
-        <BrowserRouter>
-            <Context.Provider value={ {store, dispatch} }>
+        <Context.Provider value={ {store, dispatch} }>
+
+            {isMobile? (
+                <Route exact path="/mobile" component={Mobile}/>
+                ):(
                 <div className="App">
                     <Route path="/" component={Nav} />
                     <section>
@@ -54,8 +61,10 @@ const App = props =>{
                         <Route exact path="/admin" component={Admin} />
                     </section>
                 </div>
-            </Context.Provider>
-        </BrowserRouter>
+            )
+        }
+
+        </Context.Provider>
     )
 };
 

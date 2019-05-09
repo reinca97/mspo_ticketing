@@ -1,14 +1,15 @@
 import React from 'react';
 import "./style.scss"
+import sticker from "../../Images/sticker.svg";
 
 const Intro = props =>{
 
 
     return(
         <div className="intro">
-          <div>
-              <h1> Music Story Philharmonic Orchestra</h1>
-              <h2>온라인 좌석 예매 사이트</h2>
+          <div className="background-gradation">
+
+              <img src={sticker} alt="temp-poster"/>
           </div>
 
         </div>

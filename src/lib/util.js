@@ -23,5 +23,5 @@ export const seatNameTranslator = seatName =>{
 };
 
 export const telNumTranslator = telNumStr =>{
-  return "0"+telNumStr.slice(3,-1);
+  return "0"+telNumStr.slice(3);
 };

@@ -17,21 +17,21 @@
     }
 
     &.empty{
-        background-color: #1b1b1b;
+        background-color: transparent;
         cursor: default;
     }
 
     &.valid{
-        background-color:#881a37;
+        background-color:#1a7388;
         color:#ffffff;
         cursor:pointer;
 
         &:hover{
-            background-color: #a91e41;
+            background-color: #2295b0;
         }
 
         &.selected{
-            background-color: #ffacbd;
+            background-color: #36c7da;
         }
     }
 

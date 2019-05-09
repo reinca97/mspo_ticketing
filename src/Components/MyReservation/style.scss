@@ -1,10 +1,14 @@
 .my-page{
-    margin: 40px auto;
-    width: 800px;
-    display: block;
+
+    div{
+        margin:0 auto;
+        width: 800px;
+    }
 
     h2{
         text-align: center;
+        padding: 20px 0;
+        margin:0;
     }
 
     h5{
@@ -15,12 +19,16 @@
         list-style:none;
 
         li{
-            background-color: #878787;
             padding:20px;
             margin-bottom:10px;
-            border-radius:4px;
+            border-bottom:1px solid #5d8865;
+
             .seat-num{
                 max-width:800px;
+                div{
+                    text-indent:20px;
+                    font-size:14px;
+                }
             }
 
             span{

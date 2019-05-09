@@ -69,6 +69,7 @@ const Modal_Booking = props =>{
             });
         }
 
+        //set booking limit here
         if(totalBookingCount>10){
             props.setIsDisplayModal("");
             return window.alert(`이미 예약 가능한 좌석을 초과하였습니다.
@@ -133,7 +134,7 @@ const Modal_Booking = props =>{
                 console.log(result);
                 Promise.all(promiseArr).then( resolveList => {
                     if( resolveList.length===promiseArr.length){
-                        window.alert("예약이 완료되었습니다. 나의 예약 내역 메뉴에서 확인하세요.")
+                        window.alert("예약이 완료되었습니다. [나의 예약 현황] 메뉴에서 확인하세요.")
                     }
                 });
             }

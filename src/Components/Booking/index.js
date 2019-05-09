@@ -36,12 +36,12 @@ const Booking = props =>{
     };
 
     return(
-        <div>
+        <div className="background-gradation">
             <Modal_Booking
                 isDisplayModal={isDisplayModal}
                 setIsDisplayModal={setIsDisplayModal}
             />
-            <div className="booking">
+            <div className="booking ">
                 <div >
                     <div className="info">
                         <h2>좌석 예매하기</h2>
