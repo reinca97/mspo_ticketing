@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Bad+Script|Nanum+Gothic|Stylish|Nanum+Myeongjo');
+@import url('https://fonts.googleapis.com/css?family=Bad+Script|Nanum+Gothic|Stylish|Nanum+Myeongjo|Noto+Sans+KR:100,300,500');
+
 @font-face{
   font-family:"IropkeBatangM";
   src:url("./Fonts/IropkeBatangM.eot");
@@ -11,18 +12,18 @@ body{
   //background-color: #1b1b1b;
   color: #444444;
   font-family: 'IropkeBatangM', serif;
+  background-color: #5d8865;
 
-  //h2{
-  //  font-family: 'Nanum Gothic', sans-serif;
-  //}
 
   .background-gradation{
-    min-height: 800px;
+    min-height: 900px;
     padding:0 100px 90px;
     background: linear-gradient(146deg, rgba(203,231,237,1)17%, rgb(244, 248, 247) 59%);
   }
 
   section{
+    margin-top:50px;
+
     div{
       margin: 0 auto;
     }

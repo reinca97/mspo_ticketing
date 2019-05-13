@@ -89,7 +89,7 @@ const Modal_Booking = props =>{
             //search in DB (max 95 times / ground-Na-Bk block )
             for(let i=0;i<DBseatList.length;i++){
                 if(DBseatList[i].seatNum === Number(seatDataArr[3])){
-
+                    console.log(DBseatList[i].uid);
                     if(DBseatList[i].uid){
                         return window.alert(
                            `${data} 자리가 이미 예약되어 있십니다.

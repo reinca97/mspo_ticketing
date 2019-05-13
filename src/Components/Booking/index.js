@@ -1,18 +1,24 @@
 import React, { useContext, useState ,useEffect} from 'react';
+import {Redirect} from "react-router-dom";
 import {Context} from "../../Reducers";
 import "./style.scss";
 import Zone from "../Zone";
 import Modal_Booking from "../Modal/Modal_Booking";
+import {onGetDataList} from "../../lib/getHallData";
+import {setGetDataList} from "../../Actions";
+import Mobile from "../Mobile";
 
 const Booking = props =>{
     const {store, dispatch} = useContext(Context);
     const [floor, setFloor] = useState("ground");
     const [isDisplayModal, setIsDisplayModal] = useState("");
 
-
     useEffect(()=>{
-
+        onGetDataList().then( data =>{
+            dispatch( setGetDataList(data) );
+        });
     },[]);
+
 
     const onDisplayBookingModal = () =>{
         if(store.userData.token===""){
@@ -28,6 +34,8 @@ const Booking = props =>{
         }
         validator && setIsDisplayModal("show")
     };
+
+
 
     return(
         <div className="background-gradation">
@@ -46,7 +54,7 @@ const Booking = props =>{
                                 value={floor}
                                 onChange={ev=>{setFloor(ev.target.value)}}>
                             <option value="ground">1층</option>
-                            <option value="loop">2층</option>
+                            <option value="loop" disabled={true}>2층</option>
                         </select>
                     </div>
 

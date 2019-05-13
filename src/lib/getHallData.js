@@ -33,7 +33,7 @@ export const setSeatData = (path, seatData) =>{
 export const getUserData = uid =>{
 
     return new Promise( resolve =>{
-        firebase.database().ref(`users/${uid}`).once('value').then(snapshot =>
+        firebase.database().ref(`/users/${uid}`).once('value').then(snapshot =>
             resolve( snapshot.val() )
         )
     })
@@ -42,9 +42,11 @@ export const getUserData = uid =>{
 export const setUserData = (uid, userData) =>{
 
     return new Promise( resolve =>{
-        firebase.database().ref(`users/${uid}`).set(userData).then(
+        firebase.database().ref(`/users/${uid}`).set(userData).then(
             result=>resolve(result),
             err =>resolve(null,err)
         )
     })
 };
+
+

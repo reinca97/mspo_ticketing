@@ -1,11 +1,37 @@
-
-
 .intro{
     text-align:center;
-    font-family: 'Bad Script', cursive;
-
 
     img{
         width:801px;
+    }
+
+    .concert-info{
+        width:600px;
+        height:120px;
+        text-align:left;
+        margin: 0 auto;
+        border-left: 4px solid #5d8865;
+        padding-left: 30px;
+
+        font-family: 'Noto Sans KR', sans-serif;
+
+        h3{
+            color:#444444;
+            font-weight: 100;
+            padding:20px 0 0 0;
+            font-size:22px;
+        }
+
+        h4{
+            color:#5d8865;
+            font-weight: 300;
+            font-size:24px;
+            margin:10px 0 0 0;
+
+            span{
+                font-weight: 500;
+                margin-left:10px;
+            }
+        }
     }
 }

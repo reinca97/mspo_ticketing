@@ -24,7 +24,7 @@ const App = props =>{
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect( ()=>{
-        appInit();
+        // appInit();
         checkMobile();
     },[]);
 
@@ -36,9 +36,9 @@ const App = props =>{
     };
 
     const checkMobile = () =>{
-        const browserInfo=navigator.userAgent;
-        if(browserInfo.indexOf("Mobile") !==-1){
-            setIsMobile(true);
+        const width=window.innerWidth;
+        if(width<1200){
+            setIsMobile(true)
         }
     };
 

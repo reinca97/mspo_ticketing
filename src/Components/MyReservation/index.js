@@ -5,6 +5,8 @@ import "./style.scss";
 import firebase from '../../lib/firebase';
 import {
     getUserData,
+    getSeatData,
+    setSeatData,
     setUserData
 } from "../../lib/getHallData";
 import {seatNameTranslator} from "../../lib/util"
@@ -26,12 +28,54 @@ const MyPage = props =>{
     },[]);
 
     const onDeleteBooking = index =>{
-
-        const warning = "좌석별 취소는 불가하며 현재 선택된 예약이 취소됩니다. 계속 하시겠습니까?";
+        const warning = "좌석별 취소는 불가하며, 현재 선택된 예약이 삭제됩니다. 계속 하시겠습니까?";
         if(window.confirm(warning)){
-            window.alert("아직 안만들었지롱")
+            // set 'user/[uid]' path
+            let currentUserDataList = [...userDataList];
+            currentUserDataList.splice(index,1);
+            console.log(currentUserDataList);
+
+            setUserData(store.userData.uid, currentUserDataList)
+                .then( resolve =>
+                console.log(resolve),
+                err=> console.log(err)
+                );
+
+            // set each 'seats/[selected seat]' path
+            const selectedBooking= userDataList[index];
+            selectedBooking.seats.map( async seat =>{
+                const seatDataArr = seat.split("_");
+                const seatPath = `/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
+                const fbSeatData = await getSeatData(seatPath);
+
+                for(let i=0; i<fbSeatData.length; i++){
+                    if(Number(seatDataArr[3])===fbSeatData[i].seatNum){
+                        const emptySeatData = {
+                            date:"",
+                            hostName:"",
+                            guestName:"",
+                            seatNum: fbSeatData[i].seatNum,
+                            uid:""
+                        };
+
+                        console.log(`${seatPath}/${i}`);
+                    setSeatData(`${seatPath}/${i}`,emptySeatData)
+                        .then(resolve =>console.log(resolve),
+                                err=>console.log(err) );
+                        break;
+                    }
+                }
+            });
+
+
+            window.alert("삭제되었습니다.");
+            getUserData(store.userData.uid).then(
+                result=>
+                    setUserDataList(result)
+            );
+
         }else{
-            window.alert("취소 되었습니다.")
+            window.alert("삭제 취소 되었습니다.")
         }
     };
 
@@ -57,7 +101,7 @@ const MyPage = props =>{
                                         )}
                                     </div>
                                     <button className="custom-btn warning"
-                                            onClick={()=>onDeleteBooking(data)}>
+                                            onClick={()=>onDeleteBooking(index)}>
                                         예약 취소
                                     </button>
 
