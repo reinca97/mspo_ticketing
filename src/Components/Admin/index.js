@@ -1,17 +1,18 @@
 import React, { useContext, useState, useEffect } from 'react';
-import {Redirect} from "react-router-dom";
 import {Context} from "../../Reducers";
 import "./style.scss";
-import firebase from '../../lib/firebase';
 import {
     getUserData,
-    setUserData,
     getSeatData
 } from "../../lib/getHallData";
-import {seatNameTranslator, telNumTranslator} from "../../lib/util"
+import {
+    seatNameTranslator,
+    telNumTranslator
+} from "../../lib/util"
 import TotalList from "./TotalList";
 import ZoneList from "./ZoneList";
 import exportFromJSON from 'export-from-json'
+
 
 
 const Admin = props =>{
@@ -32,9 +33,9 @@ const Admin = props =>{
     const [password, setPassword] = useState("");
 
 
+
     useEffect( ()=>{
         getUserData(`${store.userData.uid}_checkAuth`).then(result=> {
-            console.log(result);
             if(result){
                 getUserData("").then(result=>{
                     console.log(result);
@@ -51,13 +52,11 @@ const Admin = props =>{
             }
         });
 
-
         getSeatData("").then( result =>{
             console.log(result);
             const groundGA = [...result.ground.GA.FR,...result.ground.GA.BK];
             const groundNA = [...result.ground.NA.FR,...result.ground.NA.BK];
             const groundDA = [...result.ground.DA.FR,...result.ground.DA.BK];
-
             const loopGA = [...result.loop.GA.FR,...result.loop.GA.BK];
             const loopNA = [...result.loop.NA.FR,...result.loop.NA.BK];
             const loopDA = [...result.loop.DA.FR,...result.loop.DA.BK];
@@ -73,7 +72,6 @@ const Admin = props =>{
                 loopLA:loopLA
             });
         })
-
     },[]);
 
     const adminLogin = () =>{
@@ -106,6 +104,8 @@ const Admin = props =>{
         exportFromJSON({ data, fileName, exportType })
     };
 
+
+
     return(
         <section className="admin background-gradation" >
             {
@@ -119,54 +119,43 @@ const Admin = props =>{
                 </div>
             }
 
-
-
             {hide? (
                 <h4>로그인 후 사용 가능합니다.</h4>
             ):(
                 <div>
-                    {
-                        warning? (
-                            <h2>{warning}</h2>
-                        ):(
-                            <div>
-                                <h2>예매 목록</h2>
-                                <h4> 보기 모드를 선택하세요 </h4>
-                                <div className="btn-wrapper">
-                                    <button className="custom-btn go-on"
-                                            onClick={()=>setMode("show-all")}
-                                    >
+                    {warning? (
+                        <h2>{warning}</h2>
+                    ):(
+                        <div>
+                            <h2>예매 목록</h2>
+                            <h4> 보기 모드를 선택하세요 </h4>
+                            <div className="btn-wrapper">
+                                <button className="custom-btn go-on"
+                                        onClick={()=>setMode("show-all")}>
                                         건별 보기
-                                    </button>
-                                    <button className="custom-btn go-on"
-                                            onClick={()=>setMode("filter-by-zone")}
-                                    >
-                                        구역 별 보기
-                                    </button>
-                                    <button className="custom-btn admit"
-                                            onClick={()=>onDownloadBookingList()}
-                                    >
-                                        엑셀 다운로드
-                                    </button>
-                                </div>
-                                {
-                                    mode==="show-all"&&
-                                    <TotalList totalUserList={totalUserList}/>
-                                }
-                                {
-                                    mode==="filter-by-zone" &&
-                                    <ZoneList totalSeatList={totalSeatList}/>
-                                }
+                                </button>
+                                <button className="custom-btn go-on"
+                                        onClick={()=>setMode("filter-by-zone")}
+                                >
+                                    구역 별 보기
+                                </button>
+                                <button className="custom-btn admit"
+                                        onClick={()=>onDownloadBookingList()}
+                                >
+                                    엑셀 다운로드
+                                </button>
 
                             </div>
-                        )
-                    }
+                            {mode==="show-all"&&
+                                <TotalList totalUserList={totalUserList}/>}
+                            {mode==="filter-by-zone" &&
+                                <ZoneList totalSeatList={totalSeatList}/>}
+                        </div>
+                    )}
                 </div>
-                )
-            }
+            )}
         </section>
     )
-
 };
 
 export default Admin;

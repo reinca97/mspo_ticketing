@@ -49,4 +49,6 @@ export const setUserData = (uid, userData) =>{
     })
 };
 
-
+export const fbRef = path =>{
+    return firebase.database().ref(path);
+};

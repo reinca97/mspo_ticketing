@@ -1,15 +1,9 @@
-import React, { useContext, useState, useEffect } from 'react';
-import {Redirect} from "react-router-dom";
-import {Context} from "../../Reducers";
+import React from 'react';
 import "./style.scss";
-import firebase from '../../lib/firebase';
-
 import {seatNameTranslator,telNumTranslator} from "../../lib/util"
 
-const database = firebase.database();
 
 const TotalList = props =>{
-    const {store, dispatch} = useContext(Context);
 
     return(
         <div className="total-list">

@@ -2,8 +2,7 @@ import React, { useContext, useState ,useEffect} from 'react';
 import {Context} from "../../Reducers";
 import moment from "moment";
 import "./style.scss";
-import Zone from "../Zone";
-import firebase from "firebase";
+
 import {
     setGetDataList,
     setSelectedSeatsData
@@ -13,7 +12,8 @@ import {
     getSeatData,
     setSeatData,
     getUserData,
-    setUserData
+    setUserData,
+    fbRef
 } from "../../lib/getHallData";
 
 import {seatNameTranslator} from "../../lib/util";
@@ -36,7 +36,6 @@ const Modal_Booking = props =>{
         props.setIsDisplayModal("");
     };
 
-
     const onRegisterBooking = ev =>{
         ev.preventDefault();
 
@@ -53,15 +52,15 @@ const Modal_Booking = props =>{
             return window.alert("취소 되었습니다.");
         }
 
-        //set object to array before start
+        //set currently selected seats(obj) to array before start
         let selectedSeatsList = [];
         Object.keys(store.selectedSeatsData).forEach(key =>{
             if(store.selectedSeatsData[key]){
-                    selectedSeatsList.push(key);
+                selectedSeatsList.push(key);
             }
         });
 
-        //set max booking limit here
+        //count currently selected seats
         let currentBookingCount = 0;
         if(userBookingList.length){
             userBookingList.forEach( booking =>{
@@ -77,72 +76,108 @@ const Modal_Booking = props =>{
         }
 
         const timeData = moment().format("YYYY-MM-DD hh:mm");
-        let promiseArr = [];
 
-        //*******write seats data*******// Do every selected seats (max 10 times)
-        selectedSeatsList.forEach(async(data)=> {
-            const seatDataArr = data.split("_");
-            let path=`/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
-
-            const DBseatList = await getSeatData(path);
-
-            //search in DB (max 95 times / ground-Na-Bk block )
-            for(let i=0;i<DBseatList.length;i++){
-                if(DBseatList[i].seatNum === Number(seatDataArr[3])){
-                    console.log(DBseatList[i].uid);
-                    if(DBseatList[i].uid){
-                        return window.alert(
-                           `${data} 자리가 이미 예약되어 있십니다.
-                           내 자리 확인하기에서 예약 내역 확인 후 다시 시도해주세요.`)
-                    }else{
-
-                        const seatData ={
-                            uid:store.userData.token,
-                            tel:store.userData.phoneNumber,
-                            host:hostName,
-                            guest:guestName,
-                            seatNum:DBseatList[i].seatNum,
-                            date: timeData
-                        };
-
-                        console.log(seatData);
-
-                        path = path+`/${i}`;
-                        promiseArr.push(setSeatData(path, seatData) );
-                    }
-                    break;
-                }
-            }
-
+        let promiseArray = [];
+        selectedSeatsList.forEach( selectedSeat => {
+            promiseArray.push(pickValidSeatPath(selectedSeat) );
         });
 
-        //*******write user data*******//
-        const userData ={
-            tel:store.userData.phoneNumber,
-            host:hostName,
-            guest:guestName,
-            seats:[...selectedSeatsList],
-            date: timeData
-        };
+        const getExactPathList = Promise.all(promiseArray);
 
-        onSetUserData(userData).then(
-            result =>{
-                console.log(result);
-                Promise.all(promiseArr).then( resolveList => {
-                    if( resolveList.length===promiseArr.length){
-                        window.alert("예약이 완료되었습니다. [나의 예약 현황] 메뉴에서 확인하세요.")
-                    }
-                });
-            }
-        );
+        getExactPathList.then( exactPathList =>{
+            exactPathList.forEach( async path =>{
+                const FBSeatData = await getSeatData(path);
+                console.log(FBSeatData);
+            });
+        });
+
+
+
+
+
+        //*******write seats data*******// Do every selected seats (max 10 times)
+        // const getExactSeatPath = seatList =>{
+        //     let seatPathList = [];
+        //     let count= 0;
+        //
+        //     seatList.forEach(async(data)=> {
+        //         const seatDataArr = data.split("_");
+        //         let path=`/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
+        //         const DBseatList = await getSeatData(path);
+        //
+        //         //search in DB (max 95 times : ground-Na-BK block )
+        //         for(let i=0;i<DBseatList.length;i++){
+        //             if(DBseatList[i].seatNum === Number(seatDataArr[3])){
+        //                 path=`${path}/${i}`;
+        //                 seatPathList.push(path);
+        //                 break;
+        //             }
+        //         }
+        //
+        //         count++;
+        //         if(count===seatList.length){
+        //             console.log(seatPathList);
+        //             return seatPathList;
+        //         }
+        //     });
+        // };
+
+
+        // let promiseArr = [];
+        // if(DBseatList[i].uid ){
+        //     return window.alert(
+        //         `${data} 자리가 이미 예약되어 있십니다.
+        //                    내 자리 확인하기에서 예약 내역 확인 후 다시 시도해주세요.`)
+        // }else{
+        //
+        //     const seatData ={
+        //         uid:store.userData.token,
+        //         tel:store.userData.phoneNumber,
+        //         host:hostName,
+        //         guest:guestName,
+        //         seatNum:DBseatList[i].seatNum,
+        //         date: timeData
+        //     };
+        //
+        //     console.log(seatData);
+        //
+        //
+        //     // promiseArr.push(setSeatData(path, seatData) );
+        // }
+        //
+        //
+        // if(!isAleadyBooked){
+        //     //*******write user data*******//
+        //     const userData ={
+        //         tel:store.userData.phoneNumber,
+        //         host:hostName,
+        //         guest:guestName,
+        //         seats:[...selectedSeatsList],
+        //         date: timeData
+        //     };
+        //
+        //     onSetUserData(userData).then(
+        //         result =>{
+        //             console.log(result);
+        //             Promise.all(promiseArr).then( resolveList => {
+        //                 if( resolveList.length===promiseArr.length){
+        //                     window.alert("예약이 완료되었습니다. [나의 예약 현황] 메뉴에서 확인하세요.")
+        //                 }
+        //             });
+        //         }
+        //     );
+        //
+        // }
 
         onGetDataList().then(DATA => {
             dispatch( setGetDataList(DATA) );
-            dispatch(setSelectedSeatsData({}))
+            dispatch( setSelectedSeatsData({}))
         });
 
         props.setIsDisplayModal("");
     };
+
+
 
     const onSetUserData = async(userData) =>{
         let currentUserData = await getUserData(store.userData.uid)||[];
@@ -151,6 +186,18 @@ const Modal_Booking = props =>{
         setUserData(store.userData.uid, currentUserData).then(
             result=> result, err=> err
         )
+    };
+
+    const pickValidSeatPath = async seatData =>{
+        const seatDataArr = seatData.split("_");
+        let path=`/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
+        const DBseatList = await getSeatData(path);
+
+        for(let i=0; i<DBseatList.length; i++){
+            if(DBseatList[i].seatNum === Number(seatDataArr[3]) ){
+                return `${path}/${i}` ;
+            }
+        }
     };
 
 

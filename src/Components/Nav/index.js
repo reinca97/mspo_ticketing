@@ -3,8 +3,9 @@ import {Context} from "../../Reducers";
 import {  NavLink } from "react-router-dom";
 import "./style.scss"
 import firebase from "firebase";
-
 import {setUserData,onSetIsLogin} from "../../Actions";
+
+
 
 const Nav = props =>{
     const {store, dispatch} = useContext(Context);
@@ -17,13 +18,16 @@ const Nav = props =>{
                 phoneNumber:""
             }));
            dispatch(onSetIsLogin(false));
-            window.alert("정상적으로 로그아웃 되었습니다.");
+           window.alert("정상적으로 로그아웃 되었습니다.");
+
         }).catch(function(error) {
             // An error happened.
             console.log(error);
             window.alert("로그아웃에 실패하였습니다. 새로 고침 후 재시도 해주세요.")
         });
     };
+
+
 
     return(
         <div className="Nav">

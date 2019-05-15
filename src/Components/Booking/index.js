@@ -1,12 +1,12 @@
 import React, { useContext, useState ,useEffect} from 'react';
-import {Redirect} from "react-router-dom";
 import {Context} from "../../Reducers";
 import "./style.scss";
 import Zone from "../Zone";
 import Modal_Booking from "../Modal/Modal_Booking";
 import {onGetDataList} from "../../lib/getHallData";
 import {setGetDataList} from "../../Actions";
-import Mobile from "../Mobile";
+
+
 
 const Booking = props =>{
     const {store, dispatch} = useContext(Context);
@@ -20,6 +20,7 @@ const Booking = props =>{
     },[]);
 
 
+
     const onDisplayBookingModal = () =>{
         if(store.userData.token===""){
             return window.alert("로그인 후에 이용가능합니다.")
@@ -29,9 +30,11 @@ const Booking = props =>{
         Object.values(store.selectedSeatsData).forEach( value=> {
             if(value){validator=true;}
         });
+
         if(!validator){
             return window.alert("선택된 좌석이 없습니다.")
         }
+
         validator && setIsDisplayModal("show")
     };
 
@@ -41,8 +44,7 @@ const Booking = props =>{
         <div className="background-gradation">
             <Modal_Booking
                 isDisplayModal={isDisplayModal}
-                setIsDisplayModal={setIsDisplayModal}
-            />
+                setIsDisplayModal={setIsDisplayModal}/>
             <div className="booking ">
                 <div >
                     <div className="info">
@@ -56,12 +58,13 @@ const Booking = props =>{
                             <option value="ground">1층</option>
                             <option value="loop" disabled={true}>2층</option>
                         </select>
+                        <span>
+                          ( 현재 1층 좌석만 예매 가능합니다. )
+                        </span>
                     </div>
-
                 </div>
 
-                {
-                    floor==="ground" &&
+                {floor==="ground" &&
                     <div className="ground">
                         <div className="stage">
                             S T A G E
@@ -91,8 +94,7 @@ const Booking = props =>{
                     </div>
                 }
 
-                {
-                    floor==="loop"&&
+                {floor==="loop"&&
                     <div className="loop">
                         <div className="stage">
                             S T A G E
@@ -129,10 +131,8 @@ const Booking = props =>{
                         예약
                     </button>
                 </div>
-
             </div>
         </div>
-
     )
 };
 
