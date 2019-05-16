@@ -1,4 +1,4 @@
-import firebase from "../lib/firebase";
+import firebase from "firebase";
 
 
 export const onGetDataList = () => {

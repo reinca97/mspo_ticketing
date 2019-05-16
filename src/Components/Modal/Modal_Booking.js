@@ -2,7 +2,6 @@ import React, { useContext, useState ,useEffect} from 'react';
 import {Context} from "../../Reducers";
 import moment from "moment";
 import "./style.scss";
-
 import {
     setGetDataList,
     setSelectedSeatsData
@@ -17,7 +16,7 @@ import {
 } from "../../lib/getHallData";
 
 import {seatNameTranslator} from "../../lib/util";
-
+import firebase  from "firebase" ;
 
 const Modal_Booking = props =>{
     const {store, dispatch} = useContext(Context);
@@ -78,18 +77,24 @@ const Modal_Booking = props =>{
         const timeData = moment().format("YYYY-MM-DD hh:mm");
 
         let promiseArray = [];
+
         selectedSeatsList.forEach( selectedSeat => {
-            promiseArray.push(pickValidSeatPath(selectedSeat) );
+           checkAndSetSeatData(selectedSeat) ;
         });
 
-        const getExactPathList = Promise.all(promiseArray);
 
-        getExactPathList.then( exactPathList =>{
-            exactPathList.forEach( async path =>{
-                const FBSeatData = await getSeatData(path);
-                console.log(FBSeatData);
-            });
-        });
+        // selectedSeatsList.forEach( selectedSeat => {
+        //     promiseArray.push(pickValidSeatPath(selectedSeat) );
+        // });
+        //
+        // const getExactPathList = Promise.all(promiseArray);
+        //
+        // getExactPathList.then( exactPathList =>{
+        //     exactPathList.forEach( async path =>{
+        //         const FBSeatData = await getSeatData(path);
+        //         console.log(FBSeatData);
+        //     });
+        // });
 
 
 
@@ -178,24 +183,61 @@ const Modal_Booking = props =>{
     };
 
 
-
-    const onSetUserData = async(userData) =>{
-        let currentUserData = await getUserData(store.userData.uid)||[];
-        currentUserData = [...currentUserData, userData];
-
-        setUserData(store.userData.uid, currentUserData).then(
-            result=> result, err=> err
-        )
-    };
-
-    const pickValidSeatPath = async seatData =>{
+    const checkAndSetSeatData = async seatData =>{
         const seatDataArr = seatData.split("_");
         let path=`/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
+
         const DBseatList = await getSeatData(path);
+
+        let isValidSeat = true;
 
         for(let i=0; i<DBseatList.length; i++){
             if(DBseatList[i].seatNum === Number(seatDataArr[3]) ){
-                return `${path}/${i}` ;
+                const exactPath= `${path}/${i}` ;
+
+                firebase.database().ref(`seats/${exactPath}`)
+                    .transaction( currentData =>{
+
+                    if(currentData){
+                        if(currentData.uid!==""){
+                            window.alert("이미 예약된 좌석입니다.");
+                            console.log("null 아님 / uid 존재");
+                            isValidSeat = false;
+                            return currentData;
+                        }else{
+                            console.log("null 아님 / uid 없음");
+                            const timeData = moment().format("YYYY-MM-DD hh:mm");
+
+                            // currentData.uid =  store.userData.uid;
+                            // currentData.uid = store.userData.token;
+                            // currentData.tel = store.userData.phoneNumber;
+                            // currentData.host = hostName;
+                            // currentData.guest = guestName;
+                            // currentData.seatNum = DBseatList[i].seatNum;
+                            // currentData.date = timeData;
+
+                            return currentData;
+                        }
+                    }else{
+                        return currentData;
+                    }
+                }).then(
+                    response=>{
+                        console.log("----THEN SCOPE(res)----");
+                        console.log(response);
+                        if(isValidSeat){
+                            console.log("valid");
+                            console.log(exactPath);
+                        }else{
+                            console.log("invalid");
+                            console.log(exactPath);
+                        }
+
+                    }, err=>{
+                       window.alert(`에러가 발생하였습니다. 새로 고침 후 다시 시도해주세요.`)
+                    }
+                );
+                break;
             }
         }
     };
