@@ -74,172 +74,76 @@ const Modal_Booking = props =>{
             ( 현재까지 ${currentBookingCount} 석 예약 / 1인 최대 10석까지 가능 ) `)
         }
 
-        const timeData = moment().format("YYYY-MM-DD hh:mm");
-
-        let promiseArray = [];
-
-        selectedSeatsList.forEach( selectedSeat => {
-           checkAndSetSeatData(selectedSeat) ;
-        });
-
-
-        // selectedSeatsList.forEach( selectedSeat => {
-        //     promiseArray.push(pickValidSeatPath(selectedSeat) );
-        // });
-        //
-        // const getExactPathList = Promise.all(promiseArray);
-        //
-        // getExactPathList.then( exactPathList =>{
-        //     exactPathList.forEach( async path =>{
-        //         const FBSeatData = await getSeatData(path);
-        //         console.log(FBSeatData);
-        //     });
-        // });
-
-
-
-
-
-        //*******write seats data*******// Do every selected seats (max 10 times)
-        // const getExactSeatPath = seatList =>{
-        //     let seatPathList = [];
-        //     let count= 0;
-        //
-        //     seatList.forEach(async(data)=> {
-        //         const seatDataArr = data.split("_");
-        //         let path=`/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
-        //         const DBseatList = await getSeatData(path);
-        //
-        //         //search in DB (max 95 times : ground-Na-BK block )
-        //         for(let i=0;i<DBseatList.length;i++){
-        //             if(DBseatList[i].seatNum === Number(seatDataArr[3])){
-        //                 path=`${path}/${i}`;
-        //                 seatPathList.push(path);
-        //                 break;
-        //             }
-        //         }
-        //
-        //         count++;
-        //         if(count===seatList.length){
-        //             console.log(seatPathList);
-        //             return seatPathList;
-        //         }
-        //     });
-        // };
-
-
-        // let promiseArr = [];
-        // if(DBseatList[i].uid ){
-        //     return window.alert(
-        //         `${data} 자리가 이미 예약되어 있십니다.
-        //                    내 자리 확인하기에서 예약 내역 확인 후 다시 시도해주세요.`)
-        // }else{
-        //
-        //     const seatData ={
-        //         uid:store.userData.token,
-        //         tel:store.userData.phoneNumber,
-        //         host:hostName,
-        //         guest:guestName,
-        //         seatNum:DBseatList[i].seatNum,
-        //         date: timeData
-        //     };
-        //
-        //     console.log(seatData);
-        //
-        //
-        //     // promiseArr.push(setSeatData(path, seatData) );
-        // }
-        //
-        //
-        // if(!isAleadyBooked){
-        //     //*******write user data*******//
-        //     const userData ={
-        //         tel:store.userData.phoneNumber,
-        //         host:hostName,
-        //         guest:guestName,
-        //         seats:[...selectedSeatsList],
-        //         date: timeData
-        //     };
-        //
-        //     onSetUserData(userData).then(
-        //         result =>{
-        //             console.log(result);
-        //             Promise.all(promiseArr).then( resolveList => {
-        //                 if( resolveList.length===promiseArr.length){
-        //                     window.alert("예약이 완료되었습니다. [나의 예약 현황] 메뉴에서 확인하세요.")
-        //                 }
-        //             });
-        //         }
-        //     );
-        //
-        // }
+        //TODO: dispatch req action
+        checkAndSetSeatDataList(selectedSeatsList);
 
         onGetDataList().then(DATA => {
             dispatch( setGetDataList(DATA) );
             dispatch( setSelectedSeatsData({}))
         });
+        //TODO: dispatch req action (ends)
 
         props.setIsDisplayModal("");
     };
 
+    const checkAndSetSeatDataList =  async selectedSeatsList =>{
+        let update = {};
+        let updateCount = 0;
+        const timeData = moment().format("YYYY-MM-DD hh:mm");
+        console.log(selectedSeatsList);
 
-    const checkAndSetSeatData = async seatData =>{
-        const seatDataArr = seatData.split("_");
-        let path=`/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
+        selectedSeatsList.forEach( async seatData =>{
+            const seatDataArr = seatData.split("_");
+            let path=`/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
 
-        const DBseatList = await getSeatData(path);
+            const DBseatList = await getSeatData(path);
 
-        let isValidSeat = true;
+            for(let i=0; i<DBseatList.length; i++) {
+                if (DBseatList[i].seatNum === Number(seatDataArr[3]) ) {
 
-        for(let i=0; i<DBseatList.length; i++){
-            if(DBseatList[i].seatNum === Number(seatDataArr[3]) ){
-                const exactPath= `${path}/${i}` ;
-
-                firebase.database().ref(`seats/${exactPath}`)
-                    .transaction( currentData =>{
-
-                    if(currentData){
-                        if(currentData.uid!==""){
-                            window.alert("이미 예약된 좌석입니다.");
-                            console.log("null 아님 / uid 존재");
-                            isValidSeat = false;
-                            return currentData;
-                        }else{
-                            console.log("null 아님 / uid 없음");
-                            const timeData = moment().format("YYYY-MM-DD hh:mm");
-
-                            // currentData.uid =  store.userData.uid;
-                            // currentData.uid = store.userData.token;
-                            // currentData.tel = store.userData.phoneNumber;
-                            // currentData.host = hostName;
-                            // currentData.guest = guestName;
-                            // currentData.seatNum = DBseatList[i].seatNum;
-                            // currentData.date = timeData;
-
-                            return currentData;
-                        }
-                    }else{
-                        return currentData;
+                    if(DBseatList[i].uid!==""){
+                        dispatch( setSelectedSeatsData({}));
+                        return window.alert("이미 예약된 좌석입니다.")
                     }
-                }).then(
-                    response=>{
-                        console.log("----THEN SCOPE(res)----");
-                        console.log(response);
-                        if(isValidSeat){
-                            console.log("valid");
-                            console.log(exactPath);
-                        }else{
-                            console.log("invalid");
-                            console.log(exactPath);
-                        }
 
-                    }, err=>{
-                       window.alert(`에러가 발생하였습니다. 새로 고침 후 다시 시도해주세요.`)
-                    }
-                );
-                break;
+                    const exactPath = `${path}/${i}`;
+                    updateCount++;
+
+                    const seatData ={
+                                uid:store.userData.token,
+                                tel:store.userData.phoneNumber,
+                                host:hostName,
+                                guest:guestName,
+                                seatNum:DBseatList[i].seatNum,
+                                date: timeData
+                            };
+
+                    update[`/seats${exactPath}`] = seatData;
+                }
             }
-        }
+            if(selectedSeatsList.length === updateCount){
+                const userData ={
+                    tel:store.userData.phoneNumber,
+                    host:hostName,
+                    guest:guestName,
+                    seats:[...selectedSeatsList],
+                    date: timeData
+                };
+
+                const currentUserData = await getUserData(store.userData.uid);
+
+                update[`/users/${store.userData.uid}`] =
+                    [...currentUserData,userData];
+
+                firebase.database().ref().update(update).then( result => {
+                    dispatch( setSelectedSeatsData({}));
+                    getUserData(store.userData.uid).then(list =>{
+                        setUserBookingList(list||[]);
+                    });
+                    window.alert("예약이 완료되었습니다. [나의 예약 현황] 메뉴에서 확인하세요.");
+                });
+            }
+        }); //loop ends
     };
 
 

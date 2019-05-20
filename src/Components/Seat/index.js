@@ -4,15 +4,15 @@ import {setSelectedSeatsData} from '../../Actions'
 import "./style.scss";
 
 
-
-
-
 const Seat = props =>{
     const {store, dispatch} = useContext(Context);
-
     const [isSelected, setIsSelected] = useState(
         store.selectedSeatsData[props.seatInfo]
     );
+
+    useEffect(()=>{
+        setIsSelected(store.selectedSeatsData[props.seatInfo]);
+    },[store.selectedSeatsData]);
 
 
     const onToggleSeats = () => {
