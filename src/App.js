@@ -37,7 +37,7 @@ const App = props =>{
 
     const checkMobile = () =>{
         const width=window.innerWidth;
-        if(width<1200){
+        if(width<1050){
             setIsMobile(true)
         }
     };

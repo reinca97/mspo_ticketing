@@ -137,8 +137,8 @@ const Modal_Booking = props =>{
 
                 firebase.database().ref().update(update).then( result => {
                     dispatch( setSelectedSeatsData({}));
-                    getUserData(store.userData.uid).then(list =>{
-                        setUserBookingList(list||[]);
+                    onGetDataList().then( data =>{
+                        dispatch( setGetDataList(data) );
                     });
                     window.alert("예약이 완료되었습니다. [나의 예약 현황] 메뉴에서 확인하세요.");
                 });
