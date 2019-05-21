@@ -1,5 +1,6 @@
 import React, { useContext, useState ,useEffect} from 'react';
 import {Context} from "../../Reducers";
+import {Redirect} from "react-router-dom";
 import "./style.scss";
 import Zone from "../Zone";
 import Modal_Booking from "../Modal/Modal_Booking";
@@ -17,6 +18,9 @@ const Booking = props =>{
         onGetDataList().then( data =>{
             dispatch( setGetDataList(data) );
         });
+        if(!store.userData.uid){
+           return <Redirect to="/"/>
+        }
     },[]);
 
 

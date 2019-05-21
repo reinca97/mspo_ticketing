@@ -172,14 +172,14 @@ const Modal_Booking = props =>{
                     <div>
                         예약자 성함
                         <input type="text"
-                               placeholder=" 조인성 "
+                               placeholder=" 레이 첸 "
                                onChange={ev=>setHostName(ev.target.value)}
                         />
                     </div>
                     <div>
                         초대받는 분 성함
                         <input type="text"
-                               placeholder=" 정우성 "
+                               placeholder=" 용재 오닐 "
                                onChange={ev=>setGuestName(ev.target.value)}
 
                         />
