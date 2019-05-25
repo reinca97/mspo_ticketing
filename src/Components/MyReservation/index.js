@@ -1,8 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import {Redirect} from "react-router-dom";
 import {Context} from "../../Reducers";
+import {Redirect} from "react-router-dom";
 import "./style.scss";
-import firebase from '../../lib/firebase';
 import {
     getUserData,
     getSeatData,
@@ -11,14 +10,12 @@ import {
 } from "../../lib/getHallData";
 import {seatNameTranslator} from "../../lib/util"
 
-const database = firebase.database();
-
-
-
 
 const MyPage = props =>{
     const {store, dispatch} = useContext(Context);
-    const [userDataList, setUserDataList] = useState();
+    const [userDataList, setUserDataList] = useState([{
+        host:"", guest:"",seats:[]
+    }]);
 
     useEffect( ()=>{
         getUserData(store.userData.uid).then(
@@ -58,7 +55,6 @@ const MyPage = props =>{
                             uid:""
                         };
 
-                        console.log(`${seatPath}/${i}`);
                     setSeatData(`${seatPath}/${i}`,emptySeatData)
                         .then(resolve =>console.log(resolve),
                                 err=>console.log(err) );
@@ -81,47 +77,56 @@ const MyPage = props =>{
 
     return(
         <section className="my-page background-gradation" >
-            <div>
-                <h2>나의 예약 현황</h2>
-                {
-                    userDataList? (
-                        <ul>
-                            {userDataList.map( (data,index) =>
-                                <li key={index} className="btn-wrapper" >
-                                    <h5>▷ 초대하시는 분: {data.host}</h5>
-                                    <h5>▷ 손님 성함 : {data.guest}</h5>
-                                    <h5>▷ 예매한 좌석
-                                        (총 {data.seats.length}석)
-                                    </h5>
-                                    <div className= "seat-num">
-                                        {data.seats.map((seat,index) =>
-                                            <div key={`seat-${index}`}>
-                                                {index+1}) {seatNameTranslator(seat)}
+            {
+                store.isLogin? (
+                    <div>
+                        <h2>나의 예약 현황</h2>
+                        {
+                            userDataList? (
+                                <ul>
+                                    {userDataList.map( (data,index) =>
+                                        <li key={index} className="btn-wrapper" >
+                                            <div className="guest-info">
+                                                <p> 초대하시는 분: {data.host}</p>
+                                                <p> 손님 성함 : {data.guest}</p>
+                                                <button className="custom-btn warning"
+                                                        onClick={()=>onDeleteBooking(index)}>
+                                                    예약 취소
+                                                </button>
                                             </div>
-                                        )}
+
+                                            <div className= "seat-num">
+                                                <p> - 예매 좌석 ( 총 {data.seats.length} 석 ) -</p>
+                                                {data.seats.map((seat,index) =>
+                                                    <div key={`seat-${index}`}>
+                                                        ({index+1}) {seatNameTranslator(seat)}
+                                                    </div>
+                                                )}
+                                            </div>
+
+
+                                        </li>
+                                    )}
+                                </ul>
+                            ):(
+                                store.isLogin? (
+                                    <div>
+                                        - 예약 내역이 없습니다 -
                                     </div>
-                                    <button className="custom-btn warning"
-                                            onClick={()=>onDeleteBooking(index)}>
-                                        예약 취소
-                                    </button>
+                                ):(
+                                    <div>
+                                        - 로그인 후에 확인할 수 있습니다 -
+                                    </div>
+                                )
 
-                                </li>
-                            )}
-                        </ul>
-                    ):(
-                        store.isLogin? (
-                            <div>
-                                - 예약 내역이 없습니다 -
-                            </div>
-                        ):(
-                            <div>
-                                - 로그인 후에 확인할 수 있습니다 -
-                            </div>
-                        )
+                            )
+                        }
+                    </div>
+                ):(
+                    <Redirect to ="/sign-in" />
+                )
+            }
 
-                    )
-                }
-            </div>
 
         </section>
     )

@@ -12,7 +12,6 @@ const ZoneList = props =>{
     return(
         <div className="zone-list">
             <select onChange={ev =>{
-                console.log(props.totalSeatList[ev.target.value]);
                 setCurrentList(props.totalSeatList[ev.target.value])}}>
                 <option value=""> 구역을 선택하세요 </option>
                 <option value="groundGA">1층 가열</option>

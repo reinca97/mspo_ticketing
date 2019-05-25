@@ -9,10 +9,7 @@ import {
 import {
     onGetDataList,
     getSeatData,
-    setSeatData,
     getUserData,
-    setUserData,
-    fbRef
 } from "../../lib/getHallData";
 
 import {seatNameTranslator} from "../../lib/util";
@@ -68,11 +65,11 @@ const Modal_Booking = props =>{
         }
 
         //set booking limit here
-        if(currentBookingCount+ selectedSeatsList.length >10){
-            props.setIsDisplayModal("");
-            return window.alert(`이미 예약 가능한 좌석을 초과하였습니다.
-            ( 현재까지 ${currentBookingCount} 석 예약 / 1인 최대 10석까지 가능 ) `)
-        }
+        // if(currentBookingCount+ selectedSeatsList.length >10){
+        //     props.setIsDisplayModal("");
+        //     return window.alert(`이미 예약 가능한 좌석을 초과하였습니다.
+        //     ( 현재까지 ${currentBookingCount} 석 예약 / 1인 최대 10석까지 가능 ) `)
+        // }
 
         //TODO: dispatch req action
         checkAndSetSeatDataList(selectedSeatsList);
@@ -89,7 +86,7 @@ const Modal_Booking = props =>{
     const checkAndSetSeatDataList =  async selectedSeatsList =>{
         let update = {};
         let updateCount = 0;
-        const timeData = moment().format("YYYY-MM-DD hh:mm");
+        const timeData = moment().format("YYYY-MM-DD HH:mm");
         console.log(selectedSeatsList);
 
         selectedSeatsList.forEach( async seatData =>{
@@ -170,21 +167,20 @@ const Modal_Booking = props =>{
                 <form>
                     <h4> - 예매자 정보 - </h4>
                     <div>
-                        예약자 성함
+                        예약자 성함 <p>*</p>
                         <input type="text"
-                               placeholder=" 레이 첸 "
+                               placeholder=" 이정필 "
                                onChange={ev=>setHostName(ev.target.value)}
                         />
                     </div>
                     <div>
                         초대받는 분 성함
                         <input type="text"
-                               placeholder=" 용재 오닐 "
+                               placeholder=" 마동석 "
                                onChange={ev=>setGuestName(ev.target.value)}
-
                         />
                     </div>
-
+                    <p>* 예약자 성함에는 MS필하모닉 단원의 실명을 기재 바랍니다.</p>
 
                     <div className="btn-wrapper">
                         <button className="custom-btn"

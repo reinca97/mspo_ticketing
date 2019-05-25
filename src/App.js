@@ -1,11 +1,8 @@
 import React,{ useReducer, useEffect, useState } from 'react';
-import {onGetDataList} from "./lib/getHallData";
-import { BrowserRouter, Route, Redirect } from "react-router-dom";
+import { Route } from "react-router-dom";
 import './App.scss';
 import {Context, initialState, reducer} from './Reducers';
-import {onSetIsLogin, setGetDataList, setUserData} from './Actions';
 import logger from 'use-reducer-logger';
-
 
 import Mobile from "./Components/Mobile";
 import Nav from "./Components/Nav";
@@ -14,8 +11,7 @@ import Intro from "./Components/Intro";
 import SignIn from "./Components/SignIn";
 import MyReservation from "./Components/MyReservation";
 import Admin from "./Components/Admin";
-
-
+import Footer from "./Components/Footer";
 
 
 
@@ -24,20 +20,12 @@ const App = props =>{
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect( ()=>{
-        // appInit();
         checkMobile();
     },[]);
 
-
-    const appInit = async() =>{
-        const DATA = await onGetDataList();
-        dispatch( setGetDataList(DATA) );
-        //dispatch userInfo here (DATA.users)
-    };
-
     const checkMobile = () =>{
         const width=window.innerWidth;
-        if(width<1050){
+        if(width<850){
             setIsMobile(true)
         }
     };
@@ -58,6 +46,7 @@ const App = props =>{
                         <Route exact path="/sign-in" component={SignIn} />
                         <Route exact path="/my-reservation" component={MyReservation} />
                         <Route exact path="/admin" component={Admin} />
+                        <Route  path="/" component={Footer} />
                     </section>
                 </div>
             )}

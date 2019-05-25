@@ -1,6 +1,4 @@
-import React, { useContext, useState } from 'react';
-
-import "./style.scss"
+import React from 'react';
 
 
 

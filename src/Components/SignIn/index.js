@@ -85,7 +85,7 @@ const SignIn = props =>{
                     ):(
                     <div className="info">
                         <div>
-                            <h2>💁‍♀ 문자 인증 안내 </h2>
+                            <h2> 문자 인증 안내 </h2>
                             <div>
                                 <p>무분별한 예매 방지 및 본인 확인을 위하여 핸드폰 번호로 인증을 하고 있습니다.</p>
                                 <br/>
@@ -94,9 +94,6 @@ const SignIn = props =>{
                                 <p>3. 인증 코드를 입력하신 뒤 [Continue] 버튼을 눌러주세요.</p>
                             </div>
                         </div>
-
-                        <br/><br/>
-                        <p>*아래 국가 번호 버튼은 테스트 이후 삭제예정 * </p>
 
                         <div>
                             <div id="firebaseui-auth-container"></div>

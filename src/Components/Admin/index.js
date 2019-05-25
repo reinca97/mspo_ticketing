@@ -38,7 +38,6 @@ const Admin = props =>{
         getUserData(`${store.userData.uid}_checkAuth`).then(result=> {
             if(result){
                 getUserData("").then(result=>{
-                    console.log(result);
                     let tempList = [];
                     Object.keys(result).forEach(key =>{
                         if(key.indexOf("checkAuth")===-1){
@@ -53,7 +52,6 @@ const Admin = props =>{
         });
 
         getSeatData("").then( result =>{
-            console.log(result);
             const groundGA = [...result.ground.GA.FR,...result.ground.GA.BK];
             const groundNA = [...result.ground.NA.FR,...result.ground.NA.BK];
             const groundDA = [...result.ground.DA.FR,...result.ground.DA.BK];

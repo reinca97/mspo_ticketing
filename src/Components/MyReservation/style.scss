@@ -11,26 +11,41 @@
         padding-top: 50px
     }
 
-    h5{
-        margin:10px 0;
+    p{
+        display:inline-block;
+        margin: 4px 10px;
     }
 
     ul{
         list-style:none;
 
         li{
-            padding:10px;
+            padding:20px;
             margin-bottom:10px;
-            border-top:1px solid #ffffff;
             box-shadow: 1px 1px 4px gray;
+            background-color:#ffffff;
 
             button.warning{
                 margin-top:6px;
             }
 
+            .guest-info{
+                display:flex;
+
+                p{
+                    flex-grow:2;
+                }
+
+                button{
+                    flex-grow:0;
+                }
+            }
+
             .seat-num{
                 max-width:800px;
-                font-size:14px;
+                border-top: 1px solid rgba(0, 0, 0, 0.5);
+                margin-top: 20px;
+                padding-top: 10px;
             }
 
             span{
