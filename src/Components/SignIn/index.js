@@ -1,4 +1,4 @@
-import React, { useContext, useEffect,useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {Context} from "../../Reducers";
 import { Redirect } from "react-router-dom";
 import firebase from "firebase";

@@ -16,7 +16,7 @@ import exportFromJSON from 'export-from-json'
 
 
 const Admin = props =>{
-    const {store, dispatch} = useContext(Context);
+    const {store} = useContext(Context);
     const [totalUserList, setTotalUserList] = useState([]);
     const [totalSeatList, setTotalSeatList] = useState({
         groundGA:[],

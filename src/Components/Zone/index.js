@@ -5,10 +5,8 @@ import "./style.scss";
 import firebase from '../../lib/firebase';
 import Seat from "../Seat";
 
-const database = firebase.database();
-
 const Zone = props =>{
-    const {store, dispatch} = useContext(Context);
+    const {store} = useContext(Context);
     const [dataList, setDataList] = useState([null]);
 
 
@@ -33,42 +31,42 @@ const Zone = props =>{
     const seatInfoStr = `${props.floor}_${props.block}_${props.FRBK}`;
 
     //***use only init whole database***
-    const initDataList = () =>{
-        const seatsCount = ESI===null? NOS : NOS+ESI.length;
-        let seatList = [];
-
-        let seatNum = SSN;
-        let currentEmptySeatIndex = 0;
-
-        for(let i=0; i<seatsCount; i++){
-
-            if(ESI !==null && i === ESI[currentEmptySeatIndex] ){
-
-                seatList.push ({
-                    hostName:"no-one",
-                    guestName:"no-one",
-                    seatNum: null,
-                }) ;
-
-                currentEmptySeatIndex++;
-            } else{
-                seatList.push({
-                    date:"",
-                    hostName:"",
-                    guestName:"",
-                    seatNum: seatNum,
-                    uid:""
-                });
-                seatNum++;
-            }
-        }
-
-        return seatList;
-    };
-    const  writeUserData = list => {
-        firebase.database().ref(`seats/${props.floor}` + `/${props.block}`+`/${props.FRBK}` )
-            .set(list);
-    };
+    // const initDataList = () =>{
+    //     const seatsCount = ESI===null? NOS : NOS+ESI.length;
+    //     let seatList = [];
+    //
+    //     let seatNum = SSN;
+    //     let currentEmptySeatIndex = 0;
+    //
+    //     for(let i=0; i<seatsCount; i++){
+    //
+    //         if(ESI !==null && i === ESI[currentEmptySeatIndex] ){
+    //
+    //             seatList.push ({
+    //                 hostName:"no-one",
+    //                 guestName:"no-one",
+    //                 seatNum: null,
+    //             }) ;
+    //
+    //             currentEmptySeatIndex++;
+    //         } else{
+    //             seatList.push({
+    //                 date:"",
+    //                 hostName:"",
+    //                 guestName:"",
+    //                 seatNum: seatNum,
+    //                 uid:""
+    //             });
+    //             seatNum++;
+    //         }
+    //     }
+    //
+    //     return seatList;
+    // };
+    // const  writeUserData = list => {
+    //     firebase.database().ref(`seats/${props.floor}` + `/${props.block}`+`/${props.FRBK}` )
+    //         .set(list);
+    // };
     //***********************************
 
 

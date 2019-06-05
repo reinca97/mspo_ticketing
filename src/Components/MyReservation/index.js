@@ -4,15 +4,13 @@ import {Redirect} from "react-router-dom";
 import "./style.scss";
 import {
     getUserData,
-    getSeatData,
-    setSeatData,
-    setUserData
+
 } from "../../lib/getHallData";
 import {seatNameTranslator} from "../../lib/util"
 
 
 const MyPage = props =>{
-    const {store, dispatch} = useContext(Context);
+    const {store} = useContext(Context);
     const [userDataList, setUserDataList] = useState([{
         host:"", guest:"",seats:[]
     }]);
@@ -24,56 +22,6 @@ const MyPage = props =>{
         );
     },[]);
 
-    const onDeleteBooking = index =>{
-        const warning = "좌석별 취소는 불가하며, 현재 선택된 예약이 삭제됩니다. 계속 하시겠습니까?";
-        if(window.confirm(warning)){
-            // set 'user/[uid]' path
-            let currentUserDataList = [...userDataList];
-            currentUserDataList.splice(index,1);
-            console.log(currentUserDataList);
-
-            setUserData(store.userData.uid, currentUserDataList)
-                .then( resolve =>
-                console.log(resolve),
-                err=> console.log(err)
-                );
-
-            // set each 'seats/[selected seat]' path
-            const selectedBooking= userDataList[index];
-            selectedBooking.seats.map( async seat =>{
-                const seatDataArr = seat.split("_");
-                const seatPath = `/${seatDataArr[0]}/${seatDataArr[1]}/${seatDataArr[2]}`;
-                const fbSeatData = await getSeatData(seatPath);
-
-                for(let i=0; i<fbSeatData.length; i++){
-                    if(Number(seatDataArr[3])===fbSeatData[i].seatNum){
-                        const emptySeatData = {
-                            date:"",
-                            hostName:"",
-                            guestName:"",
-                            seatNum: fbSeatData[i].seatNum,
-                            uid:""
-                        };
-
-                    setSeatData(`${seatPath}/${i}`,emptySeatData)
-                        .then(resolve =>console.log(resolve),
-                                err=>console.log(err) );
-                        break;
-                    }
-                }
-            });
-
-
-            window.alert("삭제되었습니다.");
-            getUserData(store.userData.uid).then(
-                result=>
-                    setUserDataList(result)
-            );
-
-        }else{
-            window.alert("삭제 취소 되었습니다.")
-        }
-    };
 
     return(
         <section className="my-page background-gradation" >
@@ -89,8 +37,8 @@ const MyPage = props =>{
                                             <div className="guest-info">
                                                 <p> 초대하시는 분: {data.host}</p>
                                                 <p> 손님 성함 : {data.guest}</p>
-                                                <button className="custom-btn warning"
-                                                        onClick={()=>onDeleteBooking(index)}>
+                                                <button className="custom-btn"
+                                                        onClick={()=>window.alert("취소가 불가능한 기간입니다.")}>
                                                     예약 취소
                                                 </button>
                                             </div>

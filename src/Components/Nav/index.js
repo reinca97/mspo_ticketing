@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import {Context} from "../../Reducers";
 import {  NavLink } from "react-router-dom";
 import "./style.scss"
