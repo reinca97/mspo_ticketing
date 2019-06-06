@@ -2,7 +2,6 @@ import React,{ useReducer, useEffect, useState } from 'react';
 import { Route } from "react-router-dom";
 import './App.scss';
 import {Context, initialState, reducer} from './Reducers';
-import logger from 'use-reducer-logger';
 
 import Mobile from "./Components/Mobile";
 import Nav from "./Components/Nav";
@@ -16,7 +15,7 @@ import Footer from "./Components/Footer";
 
 
 const App = props =>{
-    const [store, dispatch] = useReducer( logger(reducer), initialState);
+    const [store, dispatch] = useReducer( reducer, initialState);
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect( ()=>{

@@ -87,7 +87,6 @@ const Modal_Booking = props =>{
         let update = {};
         let updateCount = 0;
         const timeData = moment().format("YYYY-MM-DD HH:mm");
-        console.log(selectedSeatsList);
 
         selectedSeatsList.forEach( async seatData =>{
             const seatDataArr = seatData.split("_");
@@ -127,7 +126,7 @@ const Modal_Booking = props =>{
                     date: timeData
                 };
 
-                const currentUserData = await getUserData(store.userData.uid);
+                const currentUserData = await getUserData(store.userData.uid)||[];
 
                 update[`/users/${store.userData.uid}`] =
                     [...currentUserData,userData];

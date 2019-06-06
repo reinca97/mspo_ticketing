@@ -18,9 +18,7 @@ const Booking = props =>{
         onGetDataList().then( data =>{
             dispatch( setGetDataList(data) );
         });
-        if(!store.userData.uid){
-           return <Redirect to="/"/>
-        }
+
     },[]);
 
 

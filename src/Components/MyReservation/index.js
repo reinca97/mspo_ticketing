@@ -30,11 +30,9 @@ const MyPage = props =>{
             // set 'user/[uid]' path
             let currentUserDataList = [...userDataList];
             currentUserDataList.splice(index,1);
-            console.log(currentUserDataList);
 
             setUserData(store.userData.uid, currentUserDataList)
                 .then( resolve =>
-                console.log(resolve),
                 err=> console.log(err)
                 );
 
@@ -56,7 +54,7 @@ const MyPage = props =>{
                         };
 
                     setSeatData(`${seatPath}/${i}`,emptySeatData)
-                        .then(resolve =>console.log(resolve),
+                        .then(resolve =>console.log(""),
                                 err=>console.log(err) );
                         break;
                     }

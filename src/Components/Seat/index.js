@@ -22,7 +22,7 @@ const Seat = props =>{
         });
 
         if(!isSelected && count>9){
-            window.alert("최대 10석까지 선택 가능합니다.")
+            window.alert("한번에 최대 10석까지 선택 가능합니다.")
         }else{
             setIsSelected(!isSelected);
             let currentData = {...store.selectedSeatsData};
