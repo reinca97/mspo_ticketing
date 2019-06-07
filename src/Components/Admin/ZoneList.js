@@ -28,8 +28,8 @@ const ZoneList = props =>{
                     (seat.guestName!=="no-one" && seat.uid!=="") &&
                     <li key={index}>
                         <div> ▷ {seat.seatNum}번 좌석</div>
-                        <div> ▷ 초대자: {seat.guest}</div>
-                        <div> ▷ 손님: {seat.host}</div>
+                        <div> ▷ 초대자: {seat.host}</div>
+                        <div> ▷ 손님: {seat.guest}</div>
                         <div> ▷ 예약 일시: {seat.date}</div>
                         <div> ▷ 연락처 : {telNumTranslator(seat.tel)}</div>
                     </li>
