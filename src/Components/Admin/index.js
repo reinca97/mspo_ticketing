@@ -86,6 +86,7 @@ const Admin = props =>{
                 guest:data.guest,
                 host:data.host,
                 tel:telNumTranslator(data.tel),
+                date:data.date
             };
             data.seats.forEach( seat =>{
                 result.push({
