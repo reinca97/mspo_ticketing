@@ -35,10 +35,14 @@ const Seat = props =>{
     return(
         props.data.uid?
             (
-                <span className={`seat reserved ${isSelected && "selected"}`} />
+                <span className={`seat reserved ${isSelected && "selected"}`} >
+                       {props.data.seatNum}
+                </span>
             ):(
                 <span className={`seat valid ${isSelected && "selected"}`}
-                      onClick={()=>onToggleSeats()} />
+                      onClick={()=>onToggleSeats()} >
+                    {props.data.seatNum}
+                </span>
             )
     )
 };
