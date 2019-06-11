@@ -26,20 +26,7 @@ const Booking = props =>{
 
 
     const onDisplayBookingModal = () =>{
-        if(store.userData.token===""){
-            return window.alert("로그인 후에 이용가능합니다.")
-        }
-
-        let validator = false;
-        Object.values(store.selectedSeatsData).forEach( value=> {
-            if(value){validator=true;}
-        });
-
-        if(!validator){
-            return window.alert("선택된 좌석이 없습니다.")
-        }
-
-        validator && setIsDisplayModal("show")
+       window.alert("예약 가능한 기간이 아닙니다.")
     };
 
 
@@ -53,6 +40,8 @@ const Booking = props =>{
                 <div >
                     <div className="info">
                         <h2>좌석 예매하기</h2>
+                        <h3>  - 온라인 예매가 종료되었습니다 - </h3>
+                        <h3> [나의 예약 현황] 에서 예매 내역의 확인만 가능합니다.</h3>
                         <span>
                             좌석을 선택 한 후 예약 버튼을 누르세요. (1인당 최대 10석 가능)
                         </span>
@@ -130,7 +119,7 @@ const Booking = props =>{
                 }
 
                 <div className="btn-wrapper">
-                    <button className="custom-btn go-on"
+                    <button className="custom-btn"
                         onClick={()=>onDisplayBookingModal()}>
                         예약
                     </button>

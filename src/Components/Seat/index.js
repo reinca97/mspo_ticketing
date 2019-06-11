@@ -16,19 +16,7 @@ const Seat = props =>{
 
 
     const onToggleSeats = () => {
-        let count =0;
-        Object.keys(store.selectedSeatsData).forEach(data=>{
-            store.selectedSeatsData[data] && count++
-        });
-
-        if(!isSelected && count>9){
-            window.alert("최대 10석까지 선택 가능합니다.")
-        }else{
-            setIsSelected(!isSelected);
-            let currentData = {...store.selectedSeatsData};
-            currentData[props.seatInfo] = !currentData[props.seatInfo];
-            dispatch( setSelectedSeatsData (currentData)) ;
-        }
+        window.alert("예약 가능한 기간이 아닙니다.");
     };
 
 
